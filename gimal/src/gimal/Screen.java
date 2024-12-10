@@ -4,26 +4,49 @@ import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Screen extends Canvas implements ComponentListener, KeyListener {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5203228742370882076L;
-	private Graphics bufferGraphics;
+public class Screen extends Canvas implements ComponentListener {
+	
+	private Graphics bg;
 	private Image offScreen;
 	private Dimension dim;
-	private player player1 = new player();
-	private monster monster1 = new monster();
+	private Character1 ryu1 = new Character1();
+    private Character2 ryu2 = new Character2();
+    private Character3 ryu3 = new Character3();
 	private int countNumber = 0;
-	private int stage = 0;
+	
+	public Screen() {
+		addComponentListener(this);
+		// 선택된 캐릭터에 따라 키 리스너 추가
+		switch (Cchoise.getSelectedCharacter()) {
+			case 1:
+				addKeyListener(ryu1);
+				break;
+			case 2:
+				addKeyListener(ryu2);
+				break;
+			case 3:
+				addKeyListener(ryu3);
+				break;
+			default:
+				// 선택된 캐릭터가 없을 경우 처리
+				break;
+		}
+		setFocusable(true);
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				repaint();
+				counting();
+			}
+		}, 0, 1);
+	}
 	public void counting() {
 		this.countNumber++;
 	}
@@ -32,52 +55,33 @@ public class Screen extends Canvas implements ComponentListener, KeyListener {
 		return this.countNumber;
 	}
 	
-	public Screen(Main mainFrame) {
-		monster.setPosition(450, 450, true);
-		addComponentListener(this);
-		this.addKeyListener(player1);
-		this.addKeyListener(monster1);
-		this.addKeyListener(this);
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				repaint();
-				counting();
-			}
-		}, 0, 1);
-	}
-	
-	private void addKeyListener(monster monster1) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void addKeyListener(player player1) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	private void initBuffer() {
 		this.dim = getSize();
 		this.offScreen = createImage(dim.width, dim.height);
-		this.bufferGraphics = this.offScreen.getGraphics();
+		this.bg = this.offScreen.getGraphics();
 	}
 	
 	@Override
 	public void paint(Graphics g) {
-		bufferGraphics.clearRect(0, 0, dim.width, dim.height);
-		if(stage == 0) {
+		bg.clearRect(0, 0, dim.width, dim.height);
+		// 캐릭터 선택에 따라 그리기
+		switch (Cchoise.getSelectedCharacter()) {
+			case 1:
+				ryu1.draw(bg, this);
+				break;
+			case 2:
+				ryu2.draw(bg, this);
+				break;
+			case 3:
+				ryu3.draw(bg, this);
+				break;
+			default:
+				// 선택된 캐릭터가 없을 경우 처리
+				break;
 		}
-		else if(stage == 1) {
-			player1.draw(bufferGraphics, this);
-			monster1.draw(bufferGraphics, this);
-		}
-		g.drawImage(this.offScreen, 0, 0, this);
+		g.drawImage(offScreen, 0, 0, this);
 	}
-
+	
 	@Override
 	public void update(Graphics g) {
 		paint(g);
@@ -85,52 +89,26 @@ public class Screen extends Canvas implements ComponentListener, KeyListener {
 	
 	@Override
 	public void componentResized(ComponentEvent e) {
+		// TODO Auto-generated method stub
 		initBuffer();
 	}
 
 	@Override
 	public void componentMoved(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public void componentShown(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public void componentHidden(ComponentEvent e) {
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-
-		if(stage == 0) {
-				stage = 1;
-		}
-		else if(stage == 1) {
-			stage = 1;
-			if(e.getKeyCode() == KeyEvent.VK_A)
-			{
-				if(checkCollision()) {
-				}
-			}
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	public boolean checkCollision() {
-		Rectangle rect1 = this.player1.getRect();
-		Rectangle rect2 = this.monster1.getRect();
-		return rect1.intersects(rect2);
-	}
 }
