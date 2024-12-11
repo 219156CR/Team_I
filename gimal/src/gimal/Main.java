@@ -9,27 +9,31 @@ import java.awt.event.MouseEvent;
 
 public class Main {
     public static void main(String[] args) {
-        // 인트로 화면 표시
-        ImageIcon introImage = new ImageIcon("image/intro.gif");
-        JLabel introLabel = new JLabel(introImage);
-        introLabel.setBounds(0, 0, 1500, 1000);
+        // 인트로 영상 크기 설정
+        int introWidth = 800;  // 영상의 가로 크기
+        int introHeight = 600; // 영상의 세로 크기
 
-        // 인트로 영상 창 설정
+        // 인트로 영상 창 생성
         JWindow introWindow = new JWindow();
-        introWindow.setSize(1500, 1000);
+        introWindow.setSize(introWidth, introHeight);
         introWindow.setLayout(new BorderLayout());
+
+        // 인트로 영상 설정
+        ImageIcon introImage = new ImageIcon("image/gamestart.gif");
+        JLabel introLabel = new JLabel(introImage);
         introWindow.add(introLabel, BorderLayout.CENTER);
-        introWindow.setLocationRelativeTo(null); // 화면 중앙에 위치
+
+        // 화면 중앙에 배치
+        introWindow.setLocationRelativeTo(null);
         introWindow.setVisible(true);
 
-        // 일정 시간 후 인트로 화면 종료 및 게임 화면으로 전환
+        // 일정 시간 후 인트로 종료 및 게임 화면 전환
         Timer introTimer = new Timer(5000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 인트로 화면을 닫고 게임 화면으로 전환
-                introWindow.dispose();
+                introWindow.dispose(); // 인트로 창 닫기
 
-                // 게임 프레임 설정
+                // 게임 화면 생성
                 JFrame frame = new JFrame("Maple Game");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setSize(1500, 1000);
@@ -37,57 +41,73 @@ public class Main {
 
                 // 배경 이미지 설정 및 크기 조정
                 ImageIcon backgroundImage = new ImageIcon("image/배경화면.jpg");
-                Image img = backgroundImage.getImage(); // ImageIcon에서 Image 객체 얻기
-                Image scaledImg = img.getScaledInstance(frame.getWidth(), frame.getHeight(), Image.SCALE_SMOOTH); // 크기 조정
-                ImageIcon scaledBackgroundImage = new ImageIcon(scaledImg); // 크기가 조정된 이미지로 ImageIcon 생성
+                Image img = backgroundImage.getImage();
+                Image scaledImg = img.getScaledInstance(frame.getWidth(), frame.getHeight(), Image.SCALE_SMOOTH);
+                ImageIcon scaledBackgroundImage = new ImageIcon(scaledImg);
 
                 JLabel backgroundLabel = new JLabel(scaledBackgroundImage);
-                backgroundLabel.setBounds(0, 0, 1500, 1000); // 배경 이미지를 JLabel에 설정
+                backgroundLabel.setBounds(0, 0, 1500, 1000);
                 frame.setContentPane(backgroundLabel);
 
+                // 맵을 표시할 Map1 객체 생성
+                Map1 map = new Map1();
+                map.width = 1200; // 맵의 가로 크기
+                map.height = 800; // 맵의 세로 크기
+                map.start_x = 150; // 맵 시작 X 좌표
+                map.start_y = 100; // 맵 시작 Y 좌표
+
+                // 맵 이미지 설정
+                ImageIcon mapImage = new ImageIcon("image/필드배경1.jpg"); // 맵 이미지 파일 경로
+                JLabel mapLabel = new JLabel(mapImage);
+                mapLabel.setBounds(map.start_x, map.start_y, map.width, map.height);
+
                 // 이미지 아이콘들 설정
-                ImageIcon image = new ImageIcon("image/1.PNG");
-                ImageIcon image2 = new ImageIcon("image/2.PNG");
+                String[] buttonImages = {"image/버튼.PNG", "image/버튼2.PNG"};
+                JLabel[] buttonLabels = new JLabel[buttonImages.length];
 
-                JLabel imageLabel = new JLabel(image);
-                JLabel imageLabel2 = new JLabel(image2);
+                for (int i = 0; i < buttonImages.length; i++) {
+                    ImageIcon buttonImage = new ImageIcon(buttonImages[i]);
+                    buttonLabels[i] = new JLabel(buttonImage);
+                    buttonLabels[i].setBounds(100 + (i * 600), 600, 300, 60); // 버튼 위치 조정
+                    final int index = i;
 
-                imageLabel.setBounds(100, 600, 200, 60); // 첫 번째 버튼의 위치
-                imageLabel2.setBounds(700, 600, 200, 60); // 두 번째 버튼의 위치
+                    buttonLabels[i].addMouseListener(new MouseAdapter() {
+                        public void mouseClicked(MouseEvent e) {
+                            if (index == 0) {
+                                // 첫 번째 버튼 클릭 시: 다른 화면으로 전환
+                                frame.dispose();
+                                JFrame choiceFrame = new JFrame("Cchoise");
+                                choiceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                                choiceFrame.setSize(1500, 1000);
+                                Cchoise.setupCchoiseFrame(choiceFrame);
+                                choiceFrame.setVisible(true);
+                            } else if (index == 1) {
+                                // 두 번째 버튼 클릭 시: 게임 종료
+                                System.exit(0);
+                            }
+                        }
+                    });
+                }
 
-                // 첫 번째 버튼 클릭 시 캐릭터 선택 화면으로 이동
-                imageLabel.addMouseListener(new MouseAdapter() {
-                    public void mouseClicked(MouseEvent e) {
-                        frame.dispose(); // 현재 프레임을 닫음
+                // 프레임에 버튼과 맵 추가
+                frame.add(mapLabel); // 맵 추가
+                for (JLabel buttonLabel : buttonLabels) {
+                    frame.add(buttonLabel); // 버튼 추가
+                }
 
-                        // 캐릭터 선택 프레임 생성
-                        JFrame cchoiseFrame = new JFrame("Cchoise");
-                        cchoiseFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                        cchoiseFrame.setSize(1500, 1000);
-
-                        Cchoise.setupCchoiseFrame(cchoiseFrame); // 캐릭터 선택 화면 설정
-
-                        cchoiseFrame.setVisible(true); // 캐릭터 선택 화면 표시
-                    }
-                });
-
-                // 두 번째 버튼 클릭 시 프로그램 종료
-                imageLabel2.addMouseListener(new MouseAdapter() {
-                    public void mouseClicked(MouseEvent e) {
-                        System.exit(0); // 프로그램 종료
-                    }
-                });
-
-                // 이미지 레이블들을 프레임에 추가
-                frame.add(imageLabel);
-                frame.add(imageLabel2);
-                frame.setVisible(true); // 프레임 표시
+                // 프레임 표시
+                frame.setVisible(true); // 게임 화면 표시
             }
         });
 
-        // 타이머 설정: 5초 후에 인트로 영상 종료
+        // 타이머 실행
         introTimer.setRepeats(false); // 한 번만 실행
-        introTimer.start(); // 타이머 시작
+        introTimer.start();
     }
 }
+
+
+
+
+
 
