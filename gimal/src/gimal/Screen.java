@@ -8,11 +8,13 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.swing.ImageIcon;
 
 public class Screen extends Canvas implements ComponentListener {
 	
 	private Graphics bg;
 	private Image offScreen;
+	private Image backgroundImage;
 	private Dimension dim;
 	private Character1 ryu1 = new Character1();
     private Character2 ryu2 = new Character2();
@@ -21,6 +23,9 @@ public class Screen extends Canvas implements ComponentListener {
 	
 	public Screen() {
 		addComponentListener(this);
+		// 배경 이미지 로드
+		backgroundImage = new ImageIcon("IMAGE/배경화면.JPG").getImage();
+		
 		// 선택된 캐릭터에 따라 키 리스너 추가
 		switch (Cchoise.getSelectedCharacter()) {
 			case 1:
@@ -64,6 +69,9 @@ public class Screen extends Canvas implements ComponentListener {
 	@Override
 	public void paint(Graphics g) {
 		bg.clearRect(0, 0, dim.width, dim.height);
+		// 배경 이미지 그리기
+		bg.drawImage(backgroundImage, 0, 0, dim.width, dim.height, this);
+		
 		// 캐릭터 선택에 따라 그리기
 		switch (Cchoise.getSelectedCharacter()) {
 			case 1:
