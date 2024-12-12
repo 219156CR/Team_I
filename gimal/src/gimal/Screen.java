@@ -24,7 +24,7 @@ public class Screen extends Canvas implements ComponentListener {
 	public Screen() {
 		addComponentListener(this);
 		// 배경 이미지 로드
-		backgroundImage = new ImageIcon("IMAGE/배경화면.JPG").getImage();
+		backgroundImage = new ImageIcon("IMAGE/필드 배경1.JPG").getImage();
 		
 		// 선택된 캐릭터에 따라 키 리스너 추가
 		switch (Cchoise.getSelectedCharacter()) {
