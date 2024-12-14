@@ -45,7 +45,6 @@ public class Main {
 
         addBackground(frame);
         addButtons(frame);
-        addMap(frame);
 
         frame.setVisible(true);
     }
@@ -104,23 +103,4 @@ public class Main {
 
         choiceFrame.setVisible(true);
     }
-
-    // 맵 추가
-    private static void addMap(JFrame frame) {
-        Map1 map = new Map1();
-        map.width = 1200;
-        map.height = 800;
-        map.start_x = 150;
-        map.start_y = 100;
-
-        ImageIcon mapImage = new ImageIcon("image/필드배경1.jpg");
-        JLabel mapLabel = new JLabel(mapImage);
-        mapLabel.setBounds(map.start_x, map.start_y, map.width, map.height);
-
-        frame.add(mapLabel);
-    }
 }
-
-
-
-

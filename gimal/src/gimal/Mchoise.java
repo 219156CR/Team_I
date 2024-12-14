@@ -24,9 +24,9 @@ public class Mchoise {
         JLabel imageLabel3 = new JLabel(image3);
         
         // 이미지 라벨 위치 설정
-        imageLabel1.setBounds(0, 600, 200, 60);
-        imageLabel2.setBounds(400, 600, 200, 60);
-        imageLabel3.setBounds(800, 600, 200, 60);
+        imageLabel1.setBounds(100, 600, 200, 60);
+        imageLabel2.setBounds(600, 600, 200, 60);
+        imageLabel3.setBounds(1100, 600, 200, 60);
         
         // 첫 번째 맵 선택 이벤트
         imageLabel1.addMouseListener(new MouseAdapter() {
