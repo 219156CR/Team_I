@@ -66,6 +66,7 @@ public class Screen extends Canvas implements ComponentListener {
 			}
 		}, 0, 1);
 	}
+	
 	public void counting() {
 		this.countNumber++;
 	}

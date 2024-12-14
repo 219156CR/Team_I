@@ -48,7 +48,6 @@ public class Character1 implements KeyListener {
 
 	public Character1() {
 		loadImage();
-
 		states1 = new Map1[5];
 		Map1 state1 = new Map1();
 		states1[0] = state1;
