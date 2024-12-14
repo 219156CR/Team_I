@@ -101,114 +101,6 @@ public class Character1 implements KeyListener {
 		state1.start_y = 260;
 		state1.frame_size = 2;
 		state1.stop = true;
-
-
-		states2 = new Map2[5];
-		Map2 state2 = new Map2();
-		states2[0] = state2;
-		state2.width = 90;
-		state2.height = 105;
-		state2.index_x = 0;
-		state2.index_y = 0;
-		state2.start_x = 0;
-		state2.start_y = 0;
-		state2.frame_size = 5;
-		
-		state2 = new Map2();
-		states2[1] = state2;
-		state2.width = 75;
-		state2.height = 105;
-		state2.index_x = 0;
-		state2.index_y = 0;
-		state2.start_x = 480;
-		state2.start_y = 0;
-		state2.frame_size = 3;
-		state2.stop = true;
-		
-		state2 = new Map2();
-		states2[2] = state2;
-		state2.width = 82;
-		state2.height = 105;
-		state2.index_x = 0;
-		state2.index_y = 0;
-		state2.start_x = 540;
-		state2.start_y = 120;
-		state2.frame_size = 6;
-		
-		state2 = new Map2();
-		states2[3] = state2;
-		state2.width = 82;
-		state2.height = 105;
-		state2.index_x = 0;
-		state2.index_y = 0;
-		state2.start_x = 540;
-		state2.start_y = 120;
-		state2.frame_size = 6;
-		
-		state2 = new Map2();
-		states2[4] = state2;
-		state2.width = 100;
-		state2.height = 105;
-		state2.index_x = 0;
-		state2.index_y = 0;
-		state2.start_x = 0;
-		state2.start_y = 260;
-		state2.frame_size = 2;
-		state2.stop = true;
-
-
-		states3 = new Map3[5];
-		Map3 state3 = new Map3();
-		states3[0] = state3;
-		state3.width = 90;
-		state3.height = 105;
-		state3.index_x = 0;
-		state3.index_y = 0;
-		state3.start_x = 0;
-		state3.start_y = 0;
-		state3.frame_size = 5;
-		
-		state3 = new Map3();
-		states3[1] = state3;
-		state3.width = 75;
-		state3.height = 105;
-		state3.index_x = 0;
-		state3.index_y = 0;
-		state3.start_x = 480;
-		state3.start_y = 0;
-		state3.frame_size = 3;
-		state3.stop = true;
-		
-		state3 = new Map3();
-		states3[2] = state3;
-		state3.width = 82;
-		state3.height = 105;
-		state3.index_x = 0;
-		state3.index_y = 0;
-		state3.start_x = 540;
-		state3.start_y = 120;
-		state3.frame_size = 6;
-		
-		state3 = new Map3();
-		states3[3] = state3;
-		state3.width = 82;
-		state3.height = 105;
-		state3.index_x = 0;
-		state3.index_y = 0;
-		state3.start_x = 540;
-		state3.start_y = 120;
-		state3.frame_size = 6;
-		
-		state3 = new Map3();
-		states3[4] = state3;
-		state3.width = 100;
-		state3.height = 105;
-		state3.index_x = 0;
-		state3.index_y = 0;
-		state3.start_x = 0;
-		state3.start_y = 260;
-		state3.frame_size = 2;
-		state3.stop = true;
 	}
 	
 	private Map1 getState() {
@@ -262,7 +154,7 @@ public class Character1 implements KeyListener {
 		int ix = state.width * state.index_x + state.start_x;
 		int iy = state.height * state.index_y + state.start_y;
 
-		int characterY = (state.index_y == 0) ? 1000 : y;
+		int characterY = (state.index_y == 0) ? 700 : y;
 
 		g.drawImage(sprite, x, characterY, 
 				x + state.width, characterY + state.height,
@@ -418,11 +310,9 @@ public class Character1 implements KeyListener {
 			} else {
 				isJumping = false;
 			}
-		//점프 후 바닥 착지 부분
-		} else if (y < 850) {
+		} else if (y < 700) {
 			y += jumpSpeed;
 		}
-		//화면 어가지 않게 조절해주는 부분
 		if (isMovingLeft) {
 			x -= moveSpeed;
 			if (x < 0) {
