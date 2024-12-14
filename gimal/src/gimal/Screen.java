@@ -133,5 +133,4 @@ public class Screen extends Canvas implements ComponentListener {
 		// TODO Auto-generated method stub
 		
 	}
-
 }
