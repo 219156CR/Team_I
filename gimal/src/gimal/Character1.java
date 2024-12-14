@@ -37,6 +37,14 @@ public class Character1 implements KeyListener {
 	private int hp = 100;
 	private final int MAX_MP = 100;
 	private final int MAX_HP = 100;
+	private long lastActionTimeA = 0;
+	private long lastActionTimeS = 0;
+	private long lastActionTimeD = 0;
+	private long lastActionTimeF = 0;
+	private final long cooldownTimeA = 500; // A키 대기시간 0.5초
+	private final long cooldownTimeS = 3000; // S키 대기시간 3초
+	private final long cooldownTimeD = 10000; // D키 대기시간 10초
+	private final long cooldownTimeF = 60000; // F키 대기시간 60초
 
 	public Character1() {
 		loadImage();
@@ -247,27 +255,29 @@ public class Character1 implements KeyListener {
 		updateJump();
 		drawCharacter(getState(), g, screen);
 		drawHealthBars(g);
+		drawCooldownBars(g);
 	}
 	
 	private void drawCharacter(Map1 state, Graphics g, Screen screen) {
-		int ix = state.width*state.index_x + state.start_x;
-		int iy = state.height*state.index_y + state.start_y;
-		
-		g.drawImage(sprite, x, y, 
-				x + state.width, y + state.height,
+		int ix = state.width * state.index_x + state.start_x;
+		int iy = state.height * state.index_y + state.start_y;
+
+		int characterY = (state.index_y == 0) ? 1000 : y;
+
+		g.drawImage(sprite, x, characterY, 
+				x + state.width, characterY + state.height,
 				ix, iy,
 				ix + state.width, 
 				iy + state.height, screen);
-		
-		if(screen.getCount() % 100 == 0) {
-			if(state.index_x < state.frame_size - 1) {
+
+		if (screen.getCount() % 100 == 0) {
+			if (state.index_x < state.frame_size - 1) {
 				state.index_x++;
-			}
-			else {
-				if(!state.stop)
+			} else {
+				if (!state.stop)
 					state.index_x = 0;
 				else
-					state.index_x = state.frame_size-1;
+					state.index_x = state.frame_size - 1;
 			}
 		}
 	}
@@ -284,6 +294,41 @@ public class Character1 implements KeyListener {
 		g.fillRect(10, 40, (int) (mp / (float) MAX_MP * 200), 20); // MP 바
 		g.setColor(Color.BLACK);
 		g.drawRect(10, 40, 200, 20); // MP 바 테두리
+	}
+
+	private void drawCooldownBars(Graphics g) {
+		int barWidth = 35; // 대기시간 바의 너비
+		int barHeight = 35; // 대기시간 바의 높이
+		int xPosition = 10; // 시작 x 좌표
+		int yPosition = 70; // 대기시간 바의 y 좌표
+
+		// A키 대기시간 바
+		long remainingA = cooldownTimeA - (System.currentTimeMillis() - lastActionTimeA);
+		g.setColor(Color.WHITE);
+		g.fillRect(xPosition, yPosition, (int) Math.max(0, (remainingA / (float) cooldownTimeA) * barWidth), barHeight);
+		g.setColor(Color.BLACK);
+		g.drawRect(xPosition, yPosition, barWidth, barHeight); // A키 대기시간 바 테두리
+
+		// S키 대기시간 바
+		long remainingS = cooldownTimeS - (System.currentTimeMillis() - lastActionTimeS);
+		g.setColor(Color.WHITE);
+		g.fillRect(xPosition + barWidth + 10, yPosition, (int) Math.max(0, (remainingS / (float) cooldownTimeS) * barWidth), barHeight);
+		g.setColor(Color.BLACK);
+		g.drawRect(xPosition + barWidth + 10, yPosition, barWidth, barHeight); // S키 대기시간 바 테두리
+
+		// D키 대기시간 바
+		long remainingD = cooldownTimeD - (System.currentTimeMillis() - lastActionTimeD);
+		g.setColor(Color.WHITE);
+		g.fillRect(xPosition + (barWidth + 10) * 2, yPosition, (int) Math.max(0, (remainingD / (float) cooldownTimeD) * barWidth), barHeight);
+		g.setColor(Color.BLACK);
+		g.drawRect(xPosition + (barWidth + 10) * 2, yPosition, barWidth, barHeight); // D키 대기시간 바 테두리
+
+		// F키 대기시간 바
+		long remainingF = cooldownTimeF - (System.currentTimeMillis() - lastActionTimeF);
+		g.setColor(Color.WHITE);
+		g.fillRect(xPosition + (barWidth + 10) * 3, yPosition, (int) Math.max(0, (remainingF / (float) cooldownTimeF) * barWidth), barHeight);
+		g.setColor(Color.BLACK);
+		g.drawRect(xPosition + (barWidth + 10) * 3, yPosition, barWidth, barHeight); // F키 대기시간 바 테두리
 	}
 
 	@Override
@@ -304,12 +349,43 @@ public class Character1 implements KeyListener {
 				this.stateIndex = 2;
 				break;
 			case KeyEvent.VK_A:
-				if (mp > 0) {
+				if (mp > 0 && System.currentTimeMillis() - lastActionTimeA > cooldownTimeA) {
 					this.stateIndex = 4;
 					mp -= MAX_MP * 0.01;
 					if (mp < 0) {
 						mp = 0;
 					}
+					lastActionTimeA = System.currentTimeMillis(); // 마지막 사용 시간 업데이트
+				}
+				break;
+			case KeyEvent.VK_S:
+				if (mp > 0 && System.currentTimeMillis() - lastActionTimeS > cooldownTimeS) {
+					this.stateIndex = 4;
+					mp -= MAX_MP * 0.05;
+					if (mp < 0) {
+						mp = 0;
+					}
+					lastActionTimeS = System.currentTimeMillis(); // 마지막 사용 시간 업데이트
+				}
+				break;
+			case KeyEvent.VK_D:
+				if (mp > 0 && System.currentTimeMillis() - lastActionTimeD > cooldownTimeD) {
+					this.stateIndex = 4;
+					mp -= MAX_MP * 0.1;
+					if (mp < 0) {
+						mp = 0;
+					}
+					lastActionTimeD = System.currentTimeMillis(); // 마지막 사용 시간 업데이트
+				}
+				break;
+			case KeyEvent.VK_F:
+				if (mp > 0 && System.currentTimeMillis() - lastActionTimeF > cooldownTimeF) {
+					this.stateIndex = 4;
+					mp -= MAX_MP * 0.5;
+					if (mp < 0) {
+						mp = 0;
+					}
+					lastActionTimeF = System.currentTimeMillis(); // 마지막 사용 시간 업데이트
 				}
 				break;
 			case KeyEvent.VK_SPACE:
