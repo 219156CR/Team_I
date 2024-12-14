@@ -24,8 +24,6 @@ public class Character1 implements KeyListener {
 	private int x = 0;
 	private int y = 650;
 	private Map1 [] states1;
-	private Map2 [] states2;
-	private Map3 [] states3;
 	private int stateIndex = 0;
 	private boolean isJumping = false;
 	private int jumpHeight = 150;
@@ -52,38 +50,43 @@ public class Character1 implements KeyListener {
 
 	public Character1() {
 		loadImage();
+		
+		//대기모션
 		states1 = new Map1[5];
 		Map1 state1 = new Map1();
 		states1[0] = state1;
-		state1.width = 90;
-		state1.height = 105;
+		state1.width = 75;
+		state1.height = 75;
 		state1.index_x = 0;
 		state1.index_y = 0;
 		state1.start_x = 0;
 		state1.start_y = 0;
-		state1.frame_size = 5;
+		state1.frame_size = 3;
 		
+		//좌측키
 		state1 = new Map1();
 		states1[1] = state1;
-		state1.width = 75;
-		state1.height = 105;
+		state1.width = 87;
+		state1.height = 273;
 		state1.index_x = 0;
 		state1.index_y = 0;
 		state1.start_x = 480;
 		state1.start_y = 0;
-		state1.frame_size = 3;
+		state1.frame_size = 4;
 		state1.stop = true;
 		
+		//우측키
 		state1 = new Map1();
 		states1[2] = state1;
-		state1.width = 82;
-		state1.height = 105;
+		state1.width = 263;
+		state1.height = 625;
 		state1.index_x = 0;
 		state1.index_y = 0;
 		state1.start_x = 540;
 		state1.start_y = 120;
-		state1.frame_size = 6;
+		state1.frame_size = 1;
 		
+		//공격키
 		state1 = new Map1();
 		states1[3] = state1;
 		state1.width = 82;
@@ -94,6 +97,7 @@ public class Character1 implements KeyListener {
 		state1.start_y = 120;
 		state1.frame_size = 6;
 		
+		//공격키2
 		state1 = new Map1();
 		states1[4] = state1;
 		state1.width = 100;
@@ -112,7 +116,7 @@ public class Character1 implements KeyListener {
 	
 	private void loadImage() {
 		try {
-			this.sprite = ImageIO.read(new File("res/ryu.png"));
+			this.sprite = ImageIO.read(new File("image/전사2.png"));
 			this.sprite = TransformColorToTransparency(sprite, new Color(70, 112, 104));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
