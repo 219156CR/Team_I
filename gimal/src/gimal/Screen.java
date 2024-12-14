@@ -11,126 +11,132 @@ import java.util.TimerTask;
 import javax.swing.ImageIcon;
 
 public class Screen extends Canvas implements ComponentListener {
-	
-	private Graphics bg;
-	private Image offScreen;
-	private Image backgroundImage;
-	private Dimension dim;
-	private Character1 ryu1 = new Character1();
+    private Graphics bg;
+    private Image offScreen;
+    private Image backgroundImage;
+    private Dimension dim;
+    private Character1 ryu1 = new Character1();
     private Character2 ryu2 = new Character2();
     private Character3 ryu3 = new Character3();
-	private int countNumber = 0;
-	
-	public Screen() {
-		addComponentListener(this);
-		// 배경 이미지 로드
-		switch (Mchoise.getSelectedMap()) {
-			case 1:
-				backgroundImage = new ImageIcon("IMAGE/필드 배경2.jpg").getImage();
-				break;
-			case 2:
-				backgroundImage = new ImageIcon("IMAGE/필드 배경3.jpg").getImage();
-				break;
-			case 3:
-				backgroundImage = new ImageIcon("IMAGE/필드 배경1.jpg").getImage();
-				break;
-			default:
-				// 기본 배경 이미지 처리 (필요시 추가)
-				backgroundImage = new ImageIcon("IMAGE/필드 배경1.jpg").getImage();
-				break;
-		}
-		
-		// 선택된 캐릭터에 따라 키 리스너 추가
-		switch (Cchoise.getSelectedCharacter()) {
-			case 1:
-				addKeyListener(ryu1);
-				break;
-			case 2:
-				addKeyListener(ryu2);
-				break;
-			case 3:
-				addKeyListener(ryu3);
-				break;
-			default:
-				// 선택된 캐릭터가 없을 경우 처리
-				break;
-		}
-		setFocusable(true);
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
-			
-			@Override
-			public void run() {
-				repaint();
-				counting();
-			}
-		}, 0, 1);
-	}
-	public void counting() {
-		this.countNumber++;
-	}
-	
-	public int getCount() {
-		return this.countNumber;
-	}
-	
-	private void initBuffer() {
-		this.dim = getSize();
-		this.offScreen = createImage(dim.width, dim.height);
-		this.bg = this.offScreen.getGraphics();
-	}
-	
-	@Override
-	public void paint(Graphics g) {
-		bg.clearRect(0, 0, dim.width, dim.height);
-		// 배경 이미지 그리기
-		bg.drawImage(backgroundImage, 0, 0, dim.width, dim.height, this);
-		
-		// 캐릭터 선택에 따라 그리기
-		switch (Cchoise.getSelectedCharacter()) {
-			case 1:
-				ryu1.draw(bg, this);
-				break;
-			case 2:
-				ryu2.draw(bg, this);
-				break;
-			case 3:
-				ryu3.draw(bg, this);
-				break;
-			default:
-				// 선택된 캐릭터가 없을 경우 처리
-				break;
-		}
-		g.drawImage(offScreen, 0, 0, this);
-	}
-	
-	@Override
-	public void update(Graphics g) {
-		paint(g);
-	}
-	
-	@Override
-	public void componentResized(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		initBuffer();
-	}
+    private Monster1 monster1;  // Monster1 객체 추가
+    private int countNumber = 0;
 
-	@Override
-	public void componentMoved(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+    public Screen() {
+        addComponentListener(this);
+        // 배경 이미지 로드
+        switch (Mchoise.getSelectedMap()) {
+            case 1:
+                backgroundImage = new ImageIcon("IMAGE/필드 배경2.jpg").getImage();
+                break;
+            case 2:
+                backgroundImage = new ImageIcon("IMAGE/필드 배경3.jpg").getImage();
+                break;
+            case 3:
+                backgroundImage = new ImageIcon("IMAGE/필드 배경1.jpg").getImage();
+                break;
+            default:
+                // 기본 배경 이미지 처리 (필요시 추가)
+                backgroundImage = new ImageIcon("IMAGE/필드 배경1.jpg").getImage();
+                break;
+        }
 
-	@Override
-	public void componentShown(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+        // 선택된 캐릭터에 따라 키 리스너 추가
+        switch (Cchoise.getSelectedCharacter()) {
+            case 1:
+                addKeyListener(ryu1);
+                break;
+            case 2:
+                addKeyListener(ryu2);
+                break;
+            case 3:
+                addKeyListener(ryu3);
+                break;
+            default:
+                // 선택된 캐릭터가 없을 경우 처리
+                break;
+        }
+        setFocusable(true);
 
-	@Override
-	public void componentHidden(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+        // Monster1 객체 초기화 및 이동 시작
+        monster1 = new Monster1();
+        monster1.startMoving();
 
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                monster1.randomizeState();  // 상태 랜덤화
+                monster1.update();  // 몬스터 상태 업데이트
+                repaint();
+                counting();
+            }
+        }, 0, 1000);  // 1초마다 상태 랜덤화
+    }
+
+    public void counting() {
+        this.countNumber++;
+    }
+
+    public int getCount() {
+        return this.countNumber;
+    }
+
+    private void initBuffer() {
+        this.dim = getSize();
+        this.offScreen = createImage(dim.width, dim.height);
+        this.bg = this.offScreen.getGraphics();
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        bg.clearRect(0, 0, dim.width, dim.height);
+        // 배경 이미지 그리기
+        bg.drawImage(backgroundImage, 0, 0, dim.width, dim.height, this);
+
+        // 캐릭터 선택에 따라 그리기
+        switch (Cchoise.getSelectedCharacter()) {
+            case 1:
+                ryu1.draw(bg, this);
+                break;
+            case 2:
+                ryu2.draw(bg, this);
+                break;
+            case 3:
+                ryu3.draw(bg, this);
+                break;
+            default:
+                // 선택된 캐릭터가 없을 경우 처리
+                break;
+        }
+
+        // 몬스터 그리기
+        monster1.draw(bg, this);
+
+        g.drawImage(offScreen, 0, 0, this);
+    }
+
+    @Override
+    public void update(Graphics g) {
+        paint(g);
+    }
+
+    @Override
+    public void componentResized(ComponentEvent e) {
+        initBuffer();
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
+        // TODO Auto-generated method stub
+    }
 }
