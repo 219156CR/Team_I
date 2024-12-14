@@ -52,54 +52,78 @@ public class Character1 implements KeyListener {
 		loadImage();
 		
 		//대기모션
-		states1 = new Map1[5];
+		states1 = new Map1[7];
 		Map1 state1 = new Map1();
 		states1[0] = state1;
-		state1.width = 75;
-		state1.height = 75;
+		state1.width = 82;
+		state1.height = 74;
 		state1.index_x = 0;
 		state1.index_y = 0;
 		state1.start_x = 0;
 		state1.start_y = 0;
-		state1.frame_size = 3;
+		state1.frame_size = 2;
 		
 		//좌측키
 		state1 = new Map1();
 		states1[1] = state1;
-		state1.width = 87;
-		state1.height = 273;
+		state1.width = 85;
+		state1.height = 75;
 		state1.index_x = 0;
 		state1.index_y = 0;
-		state1.start_x = 480;
-		state1.start_y = 0;
+		state1.start_x = 0;
+		state1.start_y = 195;
 		state1.frame_size = 4;
-		state1.stop = true;
 		
 		//우측키
 		state1 = new Map1();
 		states1[2] = state1;
-		state1.width = 263;
-		state1.height = 625;
+		state1.width = 85;
+		state1.height = 75;
 		state1.index_x = 0;
 		state1.index_y = 0;
-		state1.start_x = 540;
-		state1.start_y = 120;
-		state1.frame_size = 1;
+		state1.start_x = 0;
+		state1.start_y = 195;
+		state1.frame_size = 4;
 		
-		//공격키
+		//점프키
 		state1 = new Map1();
 		states1[3] = state1;
-		state1.width = 82;
+		state1.width = 50;
+		state1.height = 100;
+		state1.index_x = 0;
+		state1.index_y = 0;
+		state1.start_x = 565;
+		state1.start_y = 165;
+		state1.frame_size = 1;
+		state1.stop = true;
+		
+		//공격키1
+		state1 = new Map1();
+		states1[4] = state1;
+		state1.width = 100;
 		state1.height = 105;
 		state1.index_x = 0;
 		state1.index_y = 0;
-		state1.start_x = 540;
-		state1.start_y = 120;
-		state1.frame_size = 6;
+		state1.start_x = 0;
+		state1.start_y = 260;
+		state1.frame_size = 2;
+		state1.stop = true;
 		
 		//공격키2
 		state1 = new Map1();
-		states1[4] = state1;
+		states1[5] = state1;
+		state1.width = 100;
+		state1.height = 105;
+		state1.index_x = 0;
+		state1.index_y = 0;
+		state1.start_x = 0;
+		state1.start_y = 260;
+		state1.frame_size = 2;
+		state1.stop = true;
+		
+		//공격키3
+		state1 = new Map1();
+		states1[6] = state1;
 		state1.width = 100;
 		state1.height = 105;
 		state1.index_x = 0;
@@ -116,7 +140,7 @@ public class Character1 implements KeyListener {
 	
 	private void loadImage() {
 		try {
-			this.sprite = ImageIO.read(new File("image/전사2.png"));
+			this.sprite = ImageIO.read(new File("image/전사1.png"));
 			this.sprite = TransformColorToTransparency(sprite, new Color(70, 112, 104));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -263,7 +287,7 @@ public class Character1 implements KeyListener {
 		switch(e.getKeyCode()) {
 			case KeyEvent.VK_LEFT:
 				isMovingLeft = true;
-				this.stateIndex = 3;
+				this.stateIndex = 1;
 				break;
 			case KeyEvent.VK_RIGHT:
 				isMovingRight = true;
@@ -291,7 +315,7 @@ public class Character1 implements KeyListener {
 				break;
 			case KeyEvent.VK_D:
 				if (mp > 0 && System.currentTimeMillis() - lastActionTimeD > cooldownTimeD) {
-					this.stateIndex = 4;
+					this.stateIndex = 5;
 					mp -= MAX_MP * 0.1;
 					if (mp < 0) {
 						mp = 0;
@@ -301,7 +325,7 @@ public class Character1 implements KeyListener {
 				break;
 			case KeyEvent.VK_F:
 				if (mp > 0 && System.currentTimeMillis() - lastActionTimeF > cooldownTimeF) {
-					this.stateIndex = 4;
+					this.stateIndex = 6;
 					mp -= MAX_MP * 0.5;
 					if (mp < 0) {
 						mp = 0;
@@ -310,6 +334,7 @@ public class Character1 implements KeyListener {
 				}
 				break;
 			case KeyEvent.VK_SPACE:
+				this.stateIndex = 3;
 				if (!isJumping) {
 					isJumping = true;
 					jumpCount = 0; // 점프 카운트 초기화
