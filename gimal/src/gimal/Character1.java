@@ -1,6 +1,7 @@
 package gimal;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -45,6 +46,9 @@ public class Character1 implements KeyListener {
 	private final long cooldownTimeS = 3000; // S키 대기시간 3초
 	private final long cooldownTimeD = 10000; // D키 대기시간 10초
 	private final long cooldownTimeF = 60000; // F키 대기시간 60초
+	private int healCount = 0;
+	private int qKeyUses = 5; // Q키 사용 횟수
+	private int wKeyUses = 5; // W키 사용 횟수
 
 	public Character1() {
 		loadImage();
@@ -199,6 +203,10 @@ public class Character1 implements KeyListener {
 		g.fillRect(xPosition, yPosition, (int) Math.max(0, (remainingA / (float) cooldownTimeA) * barWidth), barHeight);
 		g.setColor(Color.BLACK);
 		g.drawRect(xPosition, yPosition, barWidth, barHeight); // A키 대기시간 바 테두리
+		g.setFont(new Font("Arial", Font.BOLD, 30)); // 폰트 크기를 30으로 설정
+		int aX = (int)(xPosition + barWidth / 2 - g.getFontMetrics().stringWidth("A") / 2);
+		int aY = (int)(yPosition + barHeight / 2 + 10);
+		g.drawString("A", aX, aY); // A 문자 추가
 
 		// S키 대기시간 바
 		long remainingS = cooldownTimeS - (System.currentTimeMillis() - lastActionTimeS);
@@ -206,13 +214,19 @@ public class Character1 implements KeyListener {
 		g.fillRect(xPosition + barWidth + 10, yPosition, (int) Math.max(0, (remainingS / (float) cooldownTimeS) * barWidth), barHeight);
 		g.setColor(Color.BLACK);
 		g.drawRect(xPosition + barWidth + 10, yPosition, barWidth, barHeight); // S키 대기시간 바 테두리
+		int sX = (int)(xPosition + barWidth + 10 + barWidth / 2 - g.getFontMetrics().stringWidth("S") / 2);
+		int sY = (int)(yPosition + barHeight / 2 + 10);
+		g.drawString("S", sX, sY); // S 문자 추가
 
-		// D키 대기시간 ���
+		// D키 대기시간 바
 		long remainingD = cooldownTimeD - (System.currentTimeMillis() - lastActionTimeD);
 		g.setColor(Color.WHITE);
 		g.fillRect(xPosition + (barWidth + 10) * 2, yPosition, (int) Math.max(0, (remainingD / (float) cooldownTimeD) * barWidth), barHeight);
 		g.setColor(Color.BLACK);
 		g.drawRect(xPosition + (barWidth + 10) * 2, yPosition, barWidth, barHeight); // D키 대기시간 바 테두리
+		int dX = (int)(xPosition + (barWidth + 10) * 2 + barWidth / 2 - g.getFontMetrics().stringWidth("D") / 2);
+		int dY = (int)(yPosition + barHeight / 2 + 10);
+		g.drawString("D", dX, dY); // D 문자 추가
 
 		// F키 대기시간 바
 		long remainingF = cooldownTimeF - (System.currentTimeMillis() - lastActionTimeF);
@@ -220,6 +234,17 @@ public class Character1 implements KeyListener {
 		g.fillRect(xPosition + (barWidth + 10) * 3, yPosition, (int) Math.max(0, (remainingF / (float) cooldownTimeF) * barWidth), barHeight);
 		g.setColor(Color.BLACK);
 		g.drawRect(xPosition + (barWidth + 10) * 3, yPosition, barWidth, barHeight); // F키 대기시간 바 테두리
+		int fX = (int)(xPosition + (barWidth + 10) * 3 + barWidth / 2 - g.getFontMetrics().stringWidth("F") / 2);
+		int fY = (int)(yPosition + barHeight / 2 + 10);
+		g.drawString("F", fX, fY); // F 문자 추가
+
+		// Q키 사용 횟수 표시
+		g.setColor(Color.BLACK);
+		g.drawString("HP posion Count: " + qKeyUses, 10, 150); // Q키 사용 횟수 표시
+
+		// W키 사용 횟수 표시
+		g.setColor(Color.BLACK);
+		g.drawString("Mp posion Count: " + wKeyUses, 10, 180); // W키 사용 횟수 표시
 	}
 
 	@Override
@@ -283,6 +308,24 @@ public class Character1 implements KeyListener {
 				if (!isJumping) {
 					isJumping = true;
 					jumpCount = 0; // 점프 카운트 초기화
+				}
+				break;
+			case KeyEvent.VK_Q:
+				if (qKeyUses > 0) { // 남은 사용 횟수 체크
+					hp += MAX_HP * 0.2; // HP 20% 회복
+					if (hp > MAX_HP) {
+						hp = MAX_HP; // 최대 HP 초과 방지
+					}
+					qKeyUses--; // 사용 횟수 감소
+				}
+				break;
+			case KeyEvent.VK_W:
+				if (wKeyUses > 0) { // 남은 사용 횟수 체크
+					mp += MAX_MP * 0.2; // MP 20% 회복
+					if (mp > MAX_MP) {
+						mp = MAX_MP; // 최대 MP 초과 방지
+					}
+					wKeyUses--; // 사용 횟수 감소
 				}
 				break;
 		}
