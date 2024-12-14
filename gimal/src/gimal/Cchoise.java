@@ -14,9 +14,9 @@ public class Cchoise {
     // 캐릭터 선택 프레임을 설정하는 메서드
     public static void setupCchoiseFrame(JFrame frame) {
         // 캐릭터 이미지 불러오기
-        ImageIcon image1 = new ImageIcon("image/1.PNG");
-        ImageIcon image2 = new ImageIcon("image/2.PNG");
-        ImageIcon image3 = new ImageIcon("image/3.PNG");
+        ImageIcon image1 = new ImageIcon("image/버튼.PNG");
+        ImageIcon image2 = new ImageIcon("image/버튼2.PNG");
+        ImageIcon image3 = new ImageIcon("image/버튼.PNG");
         
         // 각 이미지에 대한 JLabel 생성
         JLabel imageLabel1 = new JLabel(image1);
