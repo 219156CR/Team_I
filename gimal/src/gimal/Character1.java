@@ -50,9 +50,9 @@ public class Character1 implements KeyListener {
 
 	public Character1() {
 		loadImage();
+		states1 = new Map1[8];
 		
 		//대기모션
-		states1 = new Map1[7];
 		Map1 state1 = new Map1();
 		states1[0] = state1;
 		state1.width = 82;
@@ -100,38 +100,46 @@ public class Character1 implements KeyListener {
 		//공격키1
 		state1 = new Map1();
 		states1[4] = state1;
-		state1.width = 100;
-		state1.height = 105;
+		state1.width = 83;
+		state1.height = 95;
 		state1.index_x = 0;
 		state1.index_y = 0;
 		state1.start_x = 0;
-		state1.start_y = 260;
-		state1.frame_size = 2;
-		state1.stop = true;
+		state1.start_y = 80;
+		state1.frame_size = 3;
 		
 		//공격키2
 		state1 = new Map1();
 		states1[5] = state1;
-		state1.width = 100;
-		state1.height = 105;
+		state1.width = 125;
+		state1.height = 64;
 		state1.index_x = 0;
 		state1.index_y = 0;
 		state1.start_x = 0;
-		state1.start_y = 260;
-		state1.frame_size = 2;
-		state1.stop = true;
+		state1.start_y = 290;
+		state1.frame_size = 3;
 		
 		//공격키3
 		state1 = new Map1();
 		states1[6] = state1;
-		state1.width = 100;
-		state1.height = 105;
+		state1.width = 85;
+		state1.height = 110;
 		state1.index_x = 0;
 		state1.index_y = 0;
 		state1.start_x = 0;
-		state1.start_y = 260;
-		state1.frame_size = 2;
-		state1.stop = true;
+		state1.start_y = 80;
+		state1.frame_size = 6;
+		
+		//공격키4
+		state1 = new Map1();
+		states1[7] = state1;
+		state1.width = 141;
+		state1.height = 91;
+		state1.index_x = 0;
+		state1.index_y = 0;
+		state1.start_x = 0;
+		state1.start_y = 570;
+		state1.frame_size = 4;
 	}
 	
 	private Map1 getState() {
@@ -187,9 +195,27 @@ public class Character1 implements KeyListener {
 		int iy = state.height * state.index_y + state.start_y;
 
 		int characterY = y;
+		
+		if (stateIndex == 4) { // A키
+	        characterY -= 20; // Y 좌표를 20만큼 위로 이동
+	    }
+		if (stateIndex == 5) { // S키
+	        characterY += 10; // Y 좌표를 10만큼 아래로 이동
+	    }
+		if (stateIndex == 6) { // D키 상태
+	        characterY -= 20; // Y 좌표를 20만큼 위로 이동
+	    }
+		if (stateIndex == 7) { // F키 상태
+	        characterY -= 18; // Y 좌표를 18만큼 위로 이동
+	    }
+		
 
-		g.drawImage(sprite, x, characterY, 
-				x + state.width, characterY + state.height,
+		// 좌우 반전 처리
+		int drawX = (stateIndex == 0 || stateIndex == 2 || stateIndex == 3 || stateIndex == 4 || stateIndex == 5 || stateIndex == 6 || stateIndex == 7) ? x + state.width : x; // 대기, 우측, 점프 상태일 때 반전
+		int drawWidth = (stateIndex == 0 || stateIndex == 2 || stateIndex == 3 || stateIndex == 4 || stateIndex == 5 || stateIndex == 6 || stateIndex == 7) ? -state.width : state.width; // 대기, 우측, 점프 상태일 때 반전
+
+		g.drawImage(sprite, drawX, characterY, 
+				drawX + drawWidth, characterY + state.height,
 				ix, iy,
 				ix + state.width, 
 				iy + state.height, screen);
@@ -273,7 +299,7 @@ public class Character1 implements KeyListener {
 
 		// W키 사용 횟수 표시
 		g.setColor(Color.BLACK);
-		g.drawString("Mp posion Count: " + wKeyUses, 10, 180); // W키 사용 횟수 표시
+		g.drawString("Mp posion Count: " + wKeyUses, 10, 180); // W키 사용 ��수 표시
 	}
 
 	@Override
@@ -305,7 +331,7 @@ public class Character1 implements KeyListener {
 				break;
 			case KeyEvent.VK_S:
 				if (mp > 0 && System.currentTimeMillis() - lastActionTimeS > cooldownTimeS) {
-					this.stateIndex = 4;
+					this.stateIndex = 5;
 					mp -= MAX_MP * 0.05;
 					if (mp < 0) {
 						mp = 0;
@@ -315,7 +341,7 @@ public class Character1 implements KeyListener {
 				break;
 			case KeyEvent.VK_D:
 				if (mp > 0 && System.currentTimeMillis() - lastActionTimeD > cooldownTimeD) {
-					this.stateIndex = 5;
+					this.stateIndex = 6;
 					mp -= MAX_MP * 0.1;
 					if (mp < 0) {
 						mp = 0;
@@ -325,7 +351,7 @@ public class Character1 implements KeyListener {
 				break;
 			case KeyEvent.VK_F:
 				if (mp > 0 && System.currentTimeMillis() - lastActionTimeF > cooldownTimeF) {
-					this.stateIndex = 6;
+					this.stateIndex = 7;
 					mp -= MAX_MP * 0.5;
 					if (mp < 0) {
 						mp = 0;
@@ -381,17 +407,17 @@ public class Character1 implements KeyListener {
 	            jumpCount += jumpSpeed;
 	        } else {
 	            // 하강 로직을 부드럽게 처리
-	            if (y < 700) {
+	            if (y < 725) {
 	                y += jumpSpeed; // 하강
 	            } else {
 	                isJumping = false; // 점프 완료
-	                y = 700; // 초기 위치로 복귀
+	                y = 725; // 초기 위치로 복귀
 	                jumpCount = 0; // 점프 카운트 초기화
 	            }
 	        }
 	    } else {
 	        // 점프가 끝난 후 y를 초기 위치로 설정
-	        if (y < 700) {
+	        if (y < 725) {
 	            y += jumpSpeed; // 하강
 	        }
 	    }
