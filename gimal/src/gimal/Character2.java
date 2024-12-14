@@ -154,7 +154,7 @@ public class Character2 implements KeyListener {
 		int ix = state.width * state.index_x + state.start_x;
 		int iy = state.height * state.index_y + state.start_y;
 
-		int characterY = (state.index_y == 0) ? 750 : y;
+		int characterY = (state.index_y == 0) ? 650 : y;
 
 		g.drawImage(sprite, x, characterY, 
 				x + state.width, characterY + state.height,
@@ -314,7 +314,7 @@ public class Character2 implements KeyListener {
 		} else if (y < 850) {
 			y += jumpSpeed;
 		}
-		//화면 넘어가지 않게 조절해주는 부분
+		//화면 어가지 않게 조절해주는 부분
 		if (isMovingLeft) {
 			x -= moveSpeed;
 			if (x < 0) {
