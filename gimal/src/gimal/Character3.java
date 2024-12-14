@@ -21,7 +21,7 @@ import javax.imageio.ImageIO;
 public class Character3 implements KeyListener {
 	private BufferedImage sprite;
 	private int x = 0;
-	private int y = 850;
+	private int y = 650;
 	private Map1 [] states1;
 	private Map2 [] states2;
 	private Map3 [] states3;
@@ -154,7 +154,7 @@ public class Character3 implements KeyListener {
 		int ix = state.width * state.index_x + state.start_x;
 		int iy = state.height * state.index_y + state.start_y;
 
-		int characterY = (state.index_y == 0) ? 650 : y;
+		int characterY = y;
 
 		g.drawImage(sprite, x, characterY, 
 				x + state.width, characterY + state.height,
@@ -177,7 +177,7 @@ public class Character3 implements KeyListener {
 	private void drawHealthBars(Graphics g) {
 		// HP 바 그리기
 		g.setColor(Color.RED);
-		g.fillRect(10, 10, (int) (hp / (float) MAX_HP * 200), 20); // HP 바
+		g.fillRect(10, 10, (int) (hp / (float) MAX_HP * 200), 20); // HP 
 		g.setColor(Color.BLACK);
 		g.drawRect(10, 10, 200, 20); // HP 바 테두리
 
@@ -208,7 +208,7 @@ public class Character3 implements KeyListener {
 		g.setColor(Color.BLACK);
 		g.drawRect(xPosition + barWidth + 10, yPosition, barWidth, barHeight); // S키 대기시간 바 테두리
 
-		// D키 대기시간 바
+		// D키 대기시간 ���
 		long remainingD = cooldownTimeD - (System.currentTimeMillis() - lastActionTimeD);
 		g.setColor(Color.WHITE);
 		g.fillRect(xPosition + (barWidth + 10) * 2, yPosition, (int) Math.max(0, (remainingD / (float) cooldownTimeD) * barWidth), barHeight);
@@ -283,7 +283,7 @@ public class Character3 implements KeyListener {
 			case KeyEvent.VK_SPACE:
 				if (!isJumping) {
 					isJumping = true;
-					jumpCount = 0;
+					jumpCount = 0; // 점프 카운트 초기화
 				}
 				break;
 		}
@@ -302,29 +302,38 @@ public class Character3 implements KeyListener {
 		this.stateIndex = 0;
 	}
 
-	public void updateJump() {
-		if (isJumping) {
-			if (jumpCount < jumpHeight) {
-				y -= jumpSpeed;
-				jumpCount += jumpSpeed;
-			} else {
-				isJumping = false;
-			}
-		//점프 후 바닥 착지 부분
-		} else if (y < 850) {
-			y += jumpSpeed;
-		}
-		//화면 어가지 않게 조절해주는 부분
+	private void updateJump() {
+	    if (isJumping) {
+	        if (jumpCount < jumpHeight) {
+	            y -= jumpSpeed; // 상승
+	            jumpCount += jumpSpeed;
+	        } else {
+	            // 하강 로직을 부드럽게 처리
+	            if (y < 700) {
+	                y += jumpSpeed; // 하강
+	            } else {
+	                isJumping = false; // 점프 완료
+	                y = 700; // 초기 위치로 복귀
+	                jumpCount = 0; // 점프 카운트 초기화
+	            }
+	        }
+	    } else {
+	        // 점프가 끝난 후 y를 초기 위치로 설정
+	        if (y < 700) {
+	            y += jumpSpeed; // 하강
+	        }
+	    }
+		// 캐릭터 이동 로직 추가
 		if (isMovingLeft) {
 			x -= moveSpeed;
 			if (x < 0) {
-				x = 0;
+				x = 0; // 화면 왼쪽 경계
 			}
 		}
 		if (isMovingRight) {
 			x += moveSpeed;
 			if (x > 1400) {
-				x = 1400;
+				x = 1400; // 화면 오른쪽 경계
 			}
 		}
 	}
