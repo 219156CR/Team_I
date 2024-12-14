@@ -8,6 +8,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import javax.swing.ImageIcon;
 
 public class Screen extends Canvas implements ComponentListener {
@@ -16,6 +17,7 @@ public class Screen extends Canvas implements ComponentListener {
 	private Image offScreen;
 	private Image backgroundImage;
 	private Dimension dim;
+	private Monster1 monster1;  // Monster1 객체 추가
 	private Character1 ryu1 = new Character1();
     private Character2 ryu2 = new Character2();
     private Character3 ryu3 = new Character3();
@@ -23,6 +25,10 @@ public class Screen extends Canvas implements ComponentListener {
 	
 	public Screen() {
 		addComponentListener(this);
+		
+		// Monster1 객체 초기화 (이미지 경로 전달)
+		monster1 = new Monster1("image/몬스터10.png");  // 실제 경로에 맞게 수정 필요
+		
 		// 배경 이미지 로드
 		switch (Mchoise.getSelectedMap()) {
 			case 1:
@@ -35,7 +41,6 @@ public class Screen extends Canvas implements ComponentListener {
 				backgroundImage = new ImageIcon("IMAGE/필드 배경1.jpg").getImage();
 				break;
 			default:
-				// 기본 배경 이미지 처리 (필요시 추가)
 				backgroundImage = new ImageIcon("IMAGE/필드 배경1.jpg").getImage();
 				break;
 		}
@@ -52,10 +57,11 @@ public class Screen extends Canvas implements ComponentListener {
 				addKeyListener(ryu3);
 				break;
 			default:
-				// 선택된 캐릭터가 없을 경우 처리
 				break;
 		}
+		
 		setFocusable(true);
+		
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			
@@ -87,6 +93,9 @@ public class Screen extends Canvas implements ComponentListener {
 		// 배경 이미지 그리기
 		bg.drawImage(backgroundImage, 0, 0, dim.width, dim.height, this);
 		
+		// Monster1 애니메이션 그리기 (예: "idle" 상태로 그리기)
+		monster1.draw(bg, 100, 100, "idle");  // (100, 100) 위치에 "idle" 애니메이션 그리기
+		
 		// 캐릭터 선택에 따라 그리기
 		switch (Cchoise.getSelectedCharacter()) {
 			case 1:
@@ -99,7 +108,6 @@ public class Screen extends Canvas implements ComponentListener {
 				ryu3.draw(bg, this);
 				break;
 			default:
-				// 선택된 캐릭터가 없을 경우 처리
 				break;
 		}
 		g.drawImage(offScreen, 0, 0, this);
@@ -112,7 +120,6 @@ public class Screen extends Canvas implements ComponentListener {
 	
 	@Override
 	public void componentResized(ComponentEvent e) {
-		// TODO Auto-generated method stub
 		initBuffer();
 	}
 

@@ -146,6 +146,7 @@ public class Character1 implements KeyListener {
 			g.dispose();
 			return dest;
 	}
+	
 	public void draw(Graphics g, Screen screen) {
 		updateJump();
 		drawCharacter(getState(), g, screen);
