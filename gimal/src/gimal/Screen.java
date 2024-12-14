@@ -29,7 +29,7 @@ public class Screen extends Canvas implements ComponentListener {
 				backgroundImage = new ImageIcon("IMAGE/필드 배경2.jpg").getImage();
 				break;
 			case 2:
-				backgroundImage = new ImageIcon("IMAGE/필드 배경.jpg").getImage();
+				backgroundImage = new ImageIcon("IMAGE/필드 배경3.jpg").getImage();
 				break;
 			case 3:
 				backgroundImage = new ImageIcon("IMAGE/필드 배경1.jpg").getImage();
