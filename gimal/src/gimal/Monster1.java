@@ -66,7 +66,6 @@ public class Monster1 {
     public void randomizeState() {
         Random rand = new Random();
         int randomState = rand.nextInt(2);  // 0 또는 1을 랜덤으로 선택
-        int randomDuration = rand.nextInt(3000);  // 0초에서 3초 사이의 랜덤 시간
 
         if (!isDead) {  // 몬스터가 죽지 않았다면
             if (randomState == 0) {
@@ -74,27 +73,12 @@ public class Monster1 {
             } else {
                 currentState = "MOVE";  // 이동 상태
             }
-            try {
-                Thread.sleep(randomDuration);  // 랜덤 시간 동안 정지 또는 이동
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
 
     // 게임 루프에서 주기적으로 호출되는 메서드
-    public void gameLoop() {
-        while (!isDead) {
-            randomizeState();  // 상태 랜덤화
-            move();  // 이동 호출
-            // 화면에 몬스터 그리기 (그래픽 객체가 필요합니다)
-            // 예: monster.draw(g, screen);
-            try {
-                Thread.sleep(100);  // 100ms 마다 상태 변경
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+    public void update() {
+        move();  // 이동 호출
     }
 
     // 캐릭터와 몬스터 간의 거리를 계산해 공격을 시작하는 메서드
