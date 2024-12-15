@@ -29,7 +29,7 @@ public class Screen extends Canvas implements ComponentListener {
 		
 		// Monster1 객체 초기화 (이미지 경로 전달)
 		monster1 = new Monster1("image/몬스터10.png");  // 실제 경로에 맞게 수정 필요
-		monster2 = new Monster2("image/몬스터8.png");
+		monster2 = new Monster2("image/몬스터8-1.png");
 		// 배경 이미지 로드
 		switch (Mchoise.getSelectedMap()) {
 			case 1:

@@ -32,7 +32,6 @@ public class Monster2 {
         };
     }
     
-
     public void draw(Graphics g, int x, int y, String animationState) {
         int[] frameInfo = getFrameInfo(animationState);
         if (frameInfo != null) {
