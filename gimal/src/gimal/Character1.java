@@ -16,6 +16,7 @@ import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.IOException;
 import java.security.KeyStore.PrivateKeyEntry;
+import java.awt.Rectangle;
 
 import javax.imageio.ImageIO;
 
@@ -47,6 +48,10 @@ public class Character1 implements KeyListener {
 	private int healCount = 0;
 	private int qKeyUses = 5; // Q키 사용 횟수
 	private int wKeyUses = 5; // W키 사용 횟수
+	private Rectangle attackHitbox;
+	private boolean isAttacking = false;
+	private int attackDamage = 10;
+	private Monster1 monster1;
 
 	public Character1() {
 		loadImage();
@@ -188,6 +193,12 @@ public class Character1 implements KeyListener {
 		drawCharacter(getState(), g, screen);
 		drawHealthBars(g);
 		drawCooldownBars(g);
+		
+		// 히트박스 표시 (디버그용)
+		if (isAttacking && attackHitbox != null) {
+			g.setColor(new Color(255, 0, 0, 128));
+			g.fillRect(attackHitbox.x, attackHitbox.y, attackHitbox.width, attackHitbox.height);
+		}
 	}
 	
 	private void drawCharacter(Map1 state, Graphics g, Screen screen) {
@@ -291,7 +302,7 @@ public class Character1 implements KeyListener {
 		g.drawRect(xPosition + (barWidth + 10) * 3, yPosition, barWidth, barHeight); // F키 대기시간 바 테두리
 		int fX = (int)(xPosition + (barWidth + 10) * 3 + barWidth / 2 - g.getFontMetrics().stringWidth("F") / 2);
 		int fY = (int)(yPosition + barHeight / 2 + 10);
-		g.drawString("F", fX, fY); // F 문자 추가
+		g.drawString("F", fX, fY); // F 문자 추���
 
 		// Q키 사용 횟수 표시
 		g.setColor(Color.BLACK);
@@ -299,7 +310,7 @@ public class Character1 implements KeyListener {
 
 		// W키 사용 횟수 표시
 		g.setColor(Color.BLACK);
-		g.drawString("Mp posion Count: " + wKeyUses, 10, 180); // W키 사용 ��수 표시
+		g.drawString("Mp posion Count: " + wKeyUses, 10, 180); // W키 사용 횟수 표시
 	}
 
 	@Override
@@ -319,19 +330,47 @@ public class Character1 implements KeyListener {
 				isMovingRight = true;
 				this.stateIndex = 2;
 				break;
+				
 			case KeyEvent.VK_A:
 				if (mp > 0 && System.currentTimeMillis() - lastActionTimeA > cooldownTimeA) {
 					this.stateIndex = 4;
+					isAttacking = true;
+					
+					// 공격 방향에 따른 히트박스 생성
+					int hitboxWidth = 40;
+					int hitboxHeight = 40;
+					int hitboxX = x + (stateIndex == 1 ? -hitboxWidth : states1[4].width);
+					attackHitbox = new Rectangle(hitboxX, y, hitboxWidth, hitboxHeight);
+					
+					// 몬스터 체력 감소 로직 추가
+					if (monster1 != null && attackHitbox.intersects(monster1.getHitbox(1300, 680))) {
+						monster1.takeDamage((int)(monster1.getMaxHp() * 0.05)); // 5% 체력 감소
+					}
+					
 					mp -= MAX_MP * 0.01;
 					if (mp < 0) {
 						mp = 0;
 					}
-					lastActionTimeA = System.currentTimeMillis(); // 마지막 사용 시간 업데이트
+					lastActionTimeA = System.currentTimeMillis();
 				}
 				break;
+				
 			case KeyEvent.VK_S:
 				if (mp > 0 && System.currentTimeMillis() - lastActionTimeS > cooldownTimeS) {
 					this.stateIndex = 5;
+					isAttacking = true;
+					
+					// 공격 방향에 따른 히트박스 생성
+					int hitboxWidth = 100;
+					int hitboxHeight = 20;
+					int hitboxX = x + (stateIndex == 1 ? -hitboxWidth : states1[4].width);
+					attackHitbox = new Rectangle(hitboxX, y, hitboxWidth, hitboxHeight);
+					
+					// 몬스터 체력 감소 로직 추가
+					if (monster1 != null && attackHitbox.intersects(monster1.getHitbox(1300, 680))) {
+						monster1.takeDamage((int)(monster1.getMaxHp() * 0.10)); // 10% 체력 감소
+					}
+					
 					mp -= MAX_MP * 0.05;
 					if (mp < 0) {
 						mp = 0;
@@ -339,9 +378,23 @@ public class Character1 implements KeyListener {
 					lastActionTimeS = System.currentTimeMillis(); // 마지막 사용 시간 업데이트
 				}
 				break;
+				
 			case KeyEvent.VK_D:
 				if (mp > 0 && System.currentTimeMillis() - lastActionTimeD > cooldownTimeD) {
 					this.stateIndex = 6;
+					isAttacking = true;
+					
+					// 공격 방향에 따른 히트박스 생성
+					int hitboxWidth = 300;
+					int hitboxHeight = 100;
+					int hitboxX = x + (stateIndex == 1 ? -hitboxWidth : states1[4].width);
+					attackHitbox = new Rectangle(hitboxX, y, hitboxWidth, hitboxHeight);
+					
+					// 몬스터 체력 감소 로직 추가
+					if (monster1 != null && attackHitbox.intersects(monster1.getHitbox(1300, 680))) {
+						monster1.takeDamage((int)(monster1.getMaxHp() * 0.20)); // 20% 체력 감소
+					}
+					
 					mp -= MAX_MP * 0.1;
 					if (mp < 0) {
 						mp = 0;
@@ -349,9 +402,23 @@ public class Character1 implements KeyListener {
 					lastActionTimeD = System.currentTimeMillis(); // 마지막 사용 시간 업데이트
 				}
 				break;
+				
 			case KeyEvent.VK_F:
 				if (mp > 0 && System.currentTimeMillis() - lastActionTimeF > cooldownTimeF) {
 					this.stateIndex = 7;
+					isAttacking = true;
+					
+					// 공격 방향에 따른 히트박스 생성
+					int hitboxWidth = 500;
+					int hitboxHeight = 100;
+					int hitboxX = x + (stateIndex == 1 ? -hitboxWidth : states1[4].width);
+					attackHitbox = new Rectangle(hitboxX, y, hitboxWidth, hitboxHeight);
+					
+					// 몬스터 체력 감소 로직 추가
+					if (monster1 != null && attackHitbox.intersects(monster1.getHitbox(1300, 680))) {
+						monster1.takeDamage((int)(monster1.getMaxHp() * 0.50)); // 50% 체력 감소
+					}
+					
 					mp -= MAX_MP * 0.5;
 					if (mp < 0) {
 						mp = 0;
@@ -359,6 +426,7 @@ public class Character1 implements KeyListener {
 					lastActionTimeF = System.currentTimeMillis(); // 마지막 사용 시간 업데이트
 				}
 				break;
+				
 			case KeyEvent.VK_SPACE:
 				this.stateIndex = 3;
 				if (!isJumping) {
@@ -366,6 +434,7 @@ public class Character1 implements KeyListener {
 					jumpCount = 0; // 점프 카운트 초기화
 				}
 				break;
+				
 			case KeyEvent.VK_Q:
 				if (qKeyUses > 0) { // 남은 사용 횟수 체크
 					hp += MAX_HP * 0.2; // HP 20% 회복
@@ -375,6 +444,7 @@ public class Character1 implements KeyListener {
 					qKeyUses--; // 사용 횟수 감소
 				}
 				break;
+				
 			case KeyEvent.VK_W:
 				if (wKeyUses > 0) { // 남은 사용 횟수 체크
 					mp += MAX_MP * 0.2; // MP 20% 회복
@@ -395,6 +465,22 @@ public class Character1 implements KeyListener {
 				break;
 			case KeyEvent.VK_RIGHT:
 				isMovingRight = false;
+				break;
+			case KeyEvent.VK_A:
+				isAttacking = false;
+				attackHitbox = null;
+				break;
+			case KeyEvent.VK_S:
+				isAttacking = false;
+				attackHitbox = null;
+				break;
+			case KeyEvent.VK_D:
+				isAttacking = false;
+				attackHitbox = null;
+				break;
+			case KeyEvent.VK_F:
+				isAttacking = false;
+				attackHitbox = null;
 				break;
 		}
 		this.stateIndex = 0;

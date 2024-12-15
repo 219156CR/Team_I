@@ -7,10 +7,15 @@ import java.awt.event.*;
 
 public class Mchoise {
     private static int selectedMap = 0; // 선택된 맵 저장
+    private static int selectedMonster = 0; // 선택된 몬스터 저장
 
     // 선택된 맵 ID를 반환하는 메서드
     public static int getSelectedMap() {
         return selectedMap;
+    }
+    
+    public static int getSelectedMonster() {
+        return selectedMonster;
     }
 
     // 맵 선택 프레임을 설정하는 메서드
@@ -41,6 +46,7 @@ public class Mchoise {
         imageLabel1.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 selectedMap = 1; // 첫 번째 맵 선택
+                selectedMonster = 1; // 첫 번째 몬스터 선택
                 frame.dispose(); // 현재 프레임 닫기
 
                 // 게임 시작 프레임 생성
@@ -50,6 +56,9 @@ public class Mchoise {
 
                 Screen screen = new Screen();
                 gameFrame.add(screen);
+
+                // Monster1 객체 생성 및 추가
+                screen.setMonster1(new Monster1()); // Monster1 객체를 Screen에 설정
 
                 gameFrame.setVisible(true);
             }
@@ -59,6 +68,7 @@ public class Mchoise {
         imageLabel2.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 selectedMap = 2; // 두 번째 맵 선택
+                selectedMonster = 2; // 두 번째 몬스터 선택
                 frame.dispose(); // 현재 프레임 닫기
 
                 // 게임 시작 프레임 생성
@@ -68,6 +78,9 @@ public class Mchoise {
 
                 Screen screen = new Screen();
                 gameFrame.add(screen);
+
+                // Monster2 객체 생성 및 추가
+                screen.setMonster2(new Monster2()); // Monster2 객체를 Screen에 설정
 
                 gameFrame.setVisible(true);
             }
@@ -77,6 +90,7 @@ public class Mchoise {
         imageLabel3.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 selectedMap = 3; // 세 번째 맵 선택
+                selectedMonster = 3; // 세 번째 몬스터 선택
                 frame.dispose(); // 현재 프레임 닫기
 
                 // 게임 시작 프레임 생성
@@ -86,6 +100,9 @@ public class Mchoise {
 
                 Screen screen = new Screen();
                 gameFrame.add(screen);
+
+                // Monster3 객체 생성 및 추가
+                screen.setMonster3(new Monster3()); // Monster3 객체를 Screen에 설정
 
                 gameFrame.setVisible(true);
             }

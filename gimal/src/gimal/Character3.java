@@ -23,8 +23,6 @@ public class Character3 implements KeyListener {
 	private int x = 0;
 	private int y = 650;
 	private Map1 [] states1;
-	private Map2 [] states2;
-	private Map3 [] states3;
 	private int stateIndex = 0;
 	private boolean isJumping = false;
 	private int jumpHeight = 150;

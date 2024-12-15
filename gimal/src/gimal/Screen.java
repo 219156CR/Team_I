@@ -20,17 +20,13 @@ public class Screen extends Canvas implements ComponentListener {
 	private Monster1 monster1;
 	private Monster2 monster2;
 	private Monster3 monster3;
-	private Character1 ryu1 = new Character1();
-    private Character2 ryu2 = new Character2();
-    private Character3 ryu3 = new Character3();
+	private Character1 character1 = new Character1();
+    private Character2 character2 = new Character2();
+    private Character3 character3 = new Character3();
 	private int countNumber = 0;
 	
 	public Screen() {
 		addComponentListener(this);
-		
-		// Monster1 객체 초기화 (이미지 경로 전달)
-		monster1 = new Monster1("image/몬스터10.png");  // 실제 경로에 맞게 수정 필요
-		monster2 = new Monster2("image/몬스터8-1.png");
 		
 		// 배경 이미지 로드
 		switch (Mchoise.getSelectedMap()) {
@@ -51,13 +47,13 @@ public class Screen extends Canvas implements ComponentListener {
 		// 선택된 캐릭터에 따라 키 리스너 추가
 		switch (Cchoise.getSelectedCharacter()) {
 			case 1:
-				addKeyListener(ryu1);
+				addKeyListener(character1);
 				break;
 			case 2:
-				addKeyListener(ryu2);
+				addKeyListener(character2);
 				break;
 			case 3:
-				addKeyListener(ryu3);
+				addKeyListener(character3);
 				break;
 			default:
 				break;
@@ -96,24 +92,32 @@ public class Screen extends Canvas implements ComponentListener {
 		// 배경 이미지 그리기
 		bg.drawImage(backgroundImage, 0, 0, dim.width, dim.height, this);
 		
-		// Monster1 애니메이션 그리기 (예: "idle" 상태로 그리기)
-		monster1.draw(bg, 100, 700, "idle");  // (100, 100) 위치에 "idle" 애니메이션 그리기
-		monster2.draw(bg, 600, 641, "idle");
-		
 		// 캐릭터 선택에 따라 그리기
 		switch (Cchoise.getSelectedCharacter()) {
 			case 1:
-				ryu1.draw(bg, this);
+				character1.draw(bg, this);
 				break;
 			case 2:
-				ryu2.draw(bg, this);
+				character2.draw(bg, this);
 				break;
 			case 3:
-				ryu3.draw(bg, this);
+				character3.draw(bg, this);
 				break;
 			default:
 				break;
 		}
+		
+		// 몬스터 선택에 따라 그리기
+		if (monster1 != null) {
+			monster1.draw(bg, 1300, 680, this);
+		}
+		if (monster2 != null) {
+			monster2.draw(bg, 200, 650, this);
+		}
+		if (monster3 != null) {
+			monster3.draw(bg, 300, 650, this);
+		}
+		
 		g.drawImage(offScreen, 0, 0, this);
 	}
 	
@@ -143,5 +147,18 @@ public class Screen extends Canvas implements ComponentListener {
 	public void componentHidden(ComponentEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	// Monster1 설정 메서드
+	public void setMonster1(Monster1 monster) {
+		this.monster1 = monster;
+	}
+
+	public void setMonster2(Monster2 monster) {
+		this.monster2 = monster;
+	}
+
+	public void setMonster3(Monster3 monster) {
+		this.monster3 = monster;
 	}
 }
