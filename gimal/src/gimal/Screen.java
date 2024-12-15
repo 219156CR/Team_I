@@ -17,7 +17,8 @@ public class Screen extends Canvas implements ComponentListener {
 	private Image offScreen;
 	private Image backgroundImage;
 	private Dimension dim;
-	private Monster1 monster1;  // Monster1 객체 추가
+	private Monster1 monster1;
+	private Monster2 monster2;
 	private Character1 ryu1 = new Character1();
     private Character2 ryu2 = new Character2();
     private Character3 ryu3 = new Character3();
@@ -28,7 +29,7 @@ public class Screen extends Canvas implements ComponentListener {
 		
 		// Monster1 객체 초기화 (이미지 경로 전달)
 		monster1 = new Monster1("image/몬스터10.png");  // 실제 경로에 맞게 수정 필요
-		
+		monster2 = new Monster2("image/몬스터8.png");
 		// 배경 이미지 로드
 		switch (Mchoise.getSelectedMap()) {
 			case 1:
@@ -95,7 +96,7 @@ public class Screen extends Canvas implements ComponentListener {
 		
 		// Monster1 애니메이션 그리기 (예: "idle" 상태로 그리기)
 		monster1.draw(bg, 100, 100, "idle");  // (100, 100) 위치에 "idle" 애니메이션 그리기
-		
+		monster2.draw(bg, 600, 600, "idle");
 		// 캐릭터 선택에 따라 그리기
 		switch (Cchoise.getSelectedCharacter()) {
 			case 1:
