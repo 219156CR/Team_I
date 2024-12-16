@@ -222,7 +222,7 @@ public class Character1 implements KeyListener {
 		
 
 		// 좌우 반전 처리
-		int drawX = (stateIndex == 0 || stateIndex == 2 || stateIndex == 3 || stateIndex == 4 || stateIndex == 5 || stateIndex == 6 || stateIndex == 7) ? x + state.width : x; // 대기, 우측, 점프 상태일 때 반전
+		int drawX = (stateIndex == 0 || stateIndex == 2 || stateIndex == 3 || stateIndex == 4 || stateIndex == 5 || stateIndex == 6 || stateIndex == 7) ? x + state.width : x; // 대���, 우측, 점프 상태일 때 반전
 		int drawWidth = (stateIndex == 0 || stateIndex == 2 || stateIndex == 3 || stateIndex == 4 || stateIndex == 5 || stateIndex == 6 || stateIndex == 7) ? -state.width : state.width; // 대기, 우측, 점프 상태일 때 반전
 
 		g.drawImage(sprite, drawX, characterY, 
@@ -302,7 +302,7 @@ public class Character1 implements KeyListener {
 		g.drawRect(xPosition + (barWidth + 10) * 3, yPosition, barWidth, barHeight); // F키 대기시간 바 테두리
 		int fX = (int)(xPosition + (barWidth + 10) * 3 + barWidth / 2 - g.getFontMetrics().stringWidth("F") / 2);
 		int fY = (int)(yPosition + barHeight / 2 + 10);
-		g.drawString("F", fX, fY); // F 문자 추���
+		g.drawString("F", fX, fY); // F 문자 추가
 
 		// Q키 사용 횟수 표시
 		g.setColor(Color.BLACK);
@@ -342,9 +342,10 @@ public class Character1 implements KeyListener {
 					int hitboxX = x + (stateIndex == 1 ? -hitboxWidth : states1[4].width);
 					attackHitbox = new Rectangle(hitboxX, y, hitboxWidth, hitboxHeight);
 					
-					// 몬스터 체력 감소 로직 추가
-					if (monster1 != null && attackHitbox.intersects(monster1.getHitbox(1300, 680))) {
-						monster1.takeDamage((int)(monster1.getMaxHp() * 0.05)); // 5% 체력 감소
+					// 몬스터 체력 감소 및 물러나기 로직 추가
+					if (monster1 != null && attackHitbox.intersects(monster1.getHitbox())) {
+						monster1.takeDamage((int)(monster1.getMaxHp() * 0.10)); // 10% 체력 감소
+						monster1.setX(monster1.getX() - 10); // 몬스터를 10픽셀 뒤로 이동
 					}
 					
 					mp -= MAX_MP * 0.01;
@@ -366,9 +367,10 @@ public class Character1 implements KeyListener {
 					int hitboxX = x + (stateIndex == 1 ? -hitboxWidth : states1[4].width);
 					attackHitbox = new Rectangle(hitboxX, y, hitboxWidth, hitboxHeight);
 					
-					// 몬스터 체력 감소 로직 추가
-					if (monster1 != null && attackHitbox.intersects(monster1.getHitbox(1300, 680))) {
+					// 몬스터 체력 감소 및 물러나기 로직 추가
+					if (monster1 != null && attackHitbox.intersects(monster1.getHitbox())) {
 						monster1.takeDamage((int)(monster1.getMaxHp() * 0.10)); // 10% 체력 감소
+						monster1.setX(monster1.getX() - 10); // 몬스터를 10픽셀 뒤로 이동
 					}
 					
 					mp -= MAX_MP * 0.05;
@@ -390,9 +392,10 @@ public class Character1 implements KeyListener {
 					int hitboxX = x + (stateIndex == 1 ? -hitboxWidth : states1[4].width);
 					attackHitbox = new Rectangle(hitboxX, y, hitboxWidth, hitboxHeight);
 					
-					// 몬스터 체력 감소 로직 추가
-					if (monster1 != null && attackHitbox.intersects(monster1.getHitbox(1300, 680))) {
-						monster1.takeDamage((int)(monster1.getMaxHp() * 0.20)); // 20% 체력 감소
+					// 몬스터 체력 감소 및 물러나기 로직 추가
+					if (monster1 != null && attackHitbox.intersects(monster1.getHitbox())) {
+						monster1.takeDamage((int)(monster1.getMaxHp() * 0.10)); // 10% 체력 감소
+						monster1.setX(monster1.getX() - 10); // 몬스터를 10픽셀 뒤로 이동
 					}
 					
 					mp -= MAX_MP * 0.1;
@@ -414,9 +417,10 @@ public class Character1 implements KeyListener {
 					int hitboxX = x + (stateIndex == 1 ? -hitboxWidth : states1[4].width);
 					attackHitbox = new Rectangle(hitboxX, y, hitboxWidth, hitboxHeight);
 					
-					// 몬스터 체력 감소 로직 추가
-					if (monster1 != null && attackHitbox.intersects(monster1.getHitbox(1300, 680))) {
-						monster1.takeDamage((int)(monster1.getMaxHp() * 0.50)); // 50% 체력 감소
+					// 몬스터 체력 감소 및 물러나기 로직 추가
+					if (monster1 != null && attackHitbox.intersects(monster1.getHitbox())) {
+						monster1.takeDamage((int)(monster1.getMaxHp() * 0.10)); // 10% 체력 감소
+						monster1.setX(monster1.getX() - 10); // 몬스터를 10픽셀 뒤로 이동
 					}
 					
 					mp -= MAX_MP * 0.5;

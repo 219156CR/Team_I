@@ -109,7 +109,7 @@ public class Screen extends Canvas implements ComponentListener {
 		
 		// 몬스터 선택에 따라 그리기
 		if (monster1 != null) {
-			monster1.draw(bg, 1300, 680, this);
+			monster1.draw(bg, this);
 		}
 		if (monster2 != null) {
 			monster2.draw(bg, 200, 650, this);

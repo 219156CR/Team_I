@@ -15,23 +15,27 @@ import java.io.File;
 import java.io.IOException;
 import java.security.KeyStore.PrivateKeyEntry;
 import java.awt.Rectangle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
 public class Monster1 {
 	private BufferedImage sprite;
-	private Map2 [] Monster_states1;
+	private Map1 [] Monster_states1;
 	private int stateIndex = 0;
 	private int hp = 100;
 	private final int MAX_HP = 100;
 	private boolean isAlive = true;
+	private int x = 1300; // 몬스터의 초기 x 좌표
+	private Timer timer;
 
 	public Monster1() {
 		loadImage();
-		Monster_states1 = new Map2[3];
+		Monster_states1 = new Map1[3];
 		
 		//대기모션
-		Map2 state1 = new Map2();
+		Map1 state1 = new Map1();
 		Monster_states1[0] = state1;
 		state1.width = 146;
 		state1.height = 120;
@@ -42,7 +46,7 @@ public class Monster1 {
 		state1.frame_size = 6;
 		
 		//공격키1
-		state1 = new Map2();
+		state1 = new Map1();
 		Monster_states1[1] = state1;
 		state1.width = 83;
 		state1.height = 95;
@@ -51,6 +55,15 @@ public class Monster1 {
 		state1.start_x = 0;
 		state1.start_y = 80;
 		state1.frame_size = 3;
+		
+		// 이동 타이머 설정
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				updatePosition(); // 주기적으로 위치 업데이트
+			}
+		}, 0, 50); // 100ms마다 이동 (0.1초)
 	}
 	
 	private void loadImage() {
@@ -89,7 +102,7 @@ public class Monster1 {
 		return dest;
 	}
 
-	private void drawMonster(Map2 state, Graphics g, Screen screen, int x, int y) {
+	private void drawMonster(Map1 state, Graphics g, Screen screen, int x, int y) {
 		int ix = state.width*state.index_x + state.start_x;
 		int iy = state.height*state.index_y + state.start_y;
 		
@@ -112,8 +125,20 @@ public class Monster1 {
 		}
 	}
 
-	public void draw(Graphics g, int x, int y, Screen screen) {
+	public void updatePosition() {
+		if (isAlive) {
+			x -= 1; // 좌측으로 1픽셀 이동
+			if (x < 0) {
+				x = 0; // 화면 밖으로 나가지 않도록 제한
+			}
+		}
+	}
+
+	public void draw(Graphics g, Screen screen) {
 		if (!isAlive) return;
+		
+		// y 좌표는 고정
+		int y = 680;  // 기본 y 좌표
 		
 		drawMonster(Monster_states1[stateIndex], g, screen, x, y);
 		
@@ -122,9 +147,16 @@ public class Monster1 {
 		g.fillRect(x, y - 20, (int)(hp / (float)MAX_HP * Monster_states1[stateIndex].width), 10);
 		g.setColor(Color.BLACK);
 		g.drawRect(x, y - 20, Monster_states1[stateIndex].width, 10);
+		
+		// 히트박스 그리기 (디버그용)
+		Rectangle hitbox = getHitbox();
+		g.setColor(new Color(255, 0, 0, 128)); // 반투명 빨간색
+		g.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height); // 히트박스 그리기
+		g.setColor(Color.BLACK);
+		g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height); // 히트박스 테두리 그리기
 	}
 
-	public Map2 getState() {
+	public Map1 getState() {
 		return Monster_states1[stateIndex];
 	}
 
@@ -140,9 +172,11 @@ public class Monster1 {
 		return hp;
 	}
 
-	public Rectangle getHitbox(int x, int y) {
-		Map2 state = Monster_states1[stateIndex];
-		return new Rectangle(x, y, state.width, state.height);
+	public Rectangle getHitbox() {
+		// 현재 x 좌표를 기준으로 100x100 크기의 히트박스 생성
+		int width = 100; // 히트박스 너비
+		int height = 100; // 히트박스 높이
+		return new Rectangle(x, 680, width, height); // y 좌표는 고정
 	}
 
 	public boolean isAlive() {
@@ -151,5 +185,13 @@ public class Monster1 {
 
 	public int getMaxHp() {
 		return MAX_HP;
+	}
+
+	public void setX(int x) {
+		this.x = x; // x 좌표 설정
+	}
+
+	public int getX() {
+		return x; // x 좌표 반환
 	}
 }
