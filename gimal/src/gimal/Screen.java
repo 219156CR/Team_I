@@ -4,6 +4,7 @@ import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.Timer;
@@ -86,12 +87,41 @@ public class Screen extends Canvas implements ComponentListener {
 		this.bg = this.offScreen.getGraphics();
 	}
 	
+	private void checkCollisions() {
+        // 선택된 캐릭터에 따라 충돌 처리
+		Object activeCharacter = null;
+
+		switch (Cchoise.getSelectedCharacter()) {
+		    case 1:
+		        activeCharacter = character1;
+		        break;
+		    case 2:
+		        activeCharacter = character2;
+		        break;
+		    case 3:
+		        activeCharacter = character3;
+		        break;
+        }
+
+        // 캐릭터의 공격 히트박스가 있을 때만 충돌 검사
+        if (activeCharacter != null && ((Character1) activeCharacter).isAttacking() && monster1 != null) {
+            Rectangle characterHitbox = ((Character1) activeCharacter).getAttackHitbox();
+            Rectangle monsterHitbox = monster1.getHitbox();
+
+            // 히트박스 충돌 검사
+            if (characterHitbox != null && characterHitbox.intersects(monsterHitbox)) {
+                // 충돌 시 몬스터에게 데미지 적용
+                monster1.takeDamage(((Character1) activeCharacter).getAttackDamage());
+            }
+        }
+    }
+	
 	@Override
 	public void paint(Graphics g) {
 		bg.clearRect(0, 0, dim.width, dim.height);
 		// 배경 이미지 그리기
 		bg.drawImage(backgroundImage, 0, 0, dim.width, dim.height, this);
-		
+		checkCollisions();
 		// 캐릭터 선택에 따라 그리기
 		switch (Cchoise.getSelectedCharacter()) {
 			case 1:
