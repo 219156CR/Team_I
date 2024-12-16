@@ -17,8 +17,12 @@ import java.io.File;
 import java.io.IOException;
 import java.security.KeyStore.PrivateKeyEntry;
 import java.awt.Rectangle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
+import javax.swing.SwingUtilities;
+import javax.swing.JFrame;
 
 public class Character1 implements KeyListener {
 	private BufferedImage sprite;
@@ -52,6 +56,12 @@ public class Character1 implements KeyListener {
 	private boolean isAttacking = false;
 	private int attackDamage = 10;
 	private Monster1 monster1;
+	private boolean invincible = false;
+	private Timer invincibilityTimer = new Timer();
+	private boolean isDead = false;  // 클래스 상단에 필드 추가
+	private boolean isKnockback = false;
+	private int knockbackDistance = 150; // 넉백 거리
+	private Monster1 platformMonster;
 
 	
 	public Character1() {
@@ -60,92 +70,92 @@ public class Character1 implements KeyListener {
 		
 		//대기모션
 		Map1 state1 = new Map1();
-		states1[0] = state1;
-		state1.width = 82;
-		state1.height = 74;
-		state1.index_x = 0;
-		state1.index_y = 0;
-		state1.start_x = 0;
-		state1.start_y = 0;
-		state1.frame_size = 2;
+			states1[0] = state1;
+			state1.width = 82;
+			state1.height = 74;
+			state1.index_x = 0;
+			state1.index_y = 0;
+			state1.start_x = 0;
+			state1.start_y = 0;
+			state1.frame_size = 2;
 		
 		//좌측키
 		state1 = new Map1();
-		states1[1] = state1;
-		state1.width = 85;
-		state1.height = 75;
-		state1.index_x = 0;
-		state1.index_y = 0;
-		state1.start_x = 0;
-		state1.start_y = 195;
-		state1.frame_size = 4;
+			states1[1] = state1;
+			state1.width = 85;
+			state1.height = 75;
+			state1.index_x = 0;
+			state1.index_y = 0;
+			state1.start_x = 0;
+			state1.start_y = 195;
+			state1.frame_size = 4;
 		
 		//우측키
 		state1 = new Map1();
-		states1[2] = state1;
-		state1.width = 85;
-		state1.height = 75;
-		state1.index_x = 0;
-		state1.index_y = 0;
-		state1.start_x = 0;
-		state1.start_y = 195;
-		state1.frame_size = 4;
+			states1[2] = state1;
+			state1.width = 85;
+			state1.height = 75;
+			state1.index_x = 0;
+			state1.index_y = 0;
+			state1.start_x = 0;
+			state1.start_y = 195;
+			state1.frame_size = 4;
 		
 		//점프키
 		state1 = new Map1();
-		states1[3] = state1;
-		state1.width = 50;
-		state1.height = 100;
-		state1.index_x = 0;
-		state1.index_y = 0;
-		state1.start_x = 565;
-		state1.start_y = 165;
-		state1.frame_size = 1;
-		state1.stop = true;
+			states1[3] = state1;
+			state1.width = 50;
+			state1.height = 100;
+			state1.index_x = 0;
+			state1.index_y = 0;
+			state1.start_x = 565;
+			state1.start_y = 165;
+			state1.frame_size = 1;
+			state1.stop = true;
 		
 		//공격키1
 		state1 = new Map1();
-		states1[4] = state1;
-		state1.width = 83;
-		state1.height = 95;
-		state1.index_x = 0;
-		state1.index_y = 0;
-		state1.start_x = 0;
-		state1.start_y = 80;
-		state1.frame_size = 3;
+			states1[4] = state1;
+			state1.width = 83;
+			state1.height = 95;
+			state1.index_x = 0;
+			state1.index_y = 0;
+			state1.start_x = 0;
+			state1.start_y = 80;
+			state1.frame_size = 3;
 		
 		//공격키2
 		state1 = new Map1();
-		states1[5] = state1;
-		state1.width = 125;
-		state1.height = 64;
-		state1.index_x = 0;
-		state1.index_y = 0;
-		state1.start_x = 0;
-		state1.start_y = 290;
-		state1.frame_size = 3;
+			states1[5] = state1;
+			state1.width = 125;
+			state1.height = 64;
+			state1.index_x = 0;
+			state1.index_y = 0;
+			state1.start_x = 0;
+			state1.start_y = 290;
+			state1.frame_size = 3;
 		
 		//공격키3
 		state1 = new Map1();
-		states1[6] = state1;
-		state1.width = 85;
-		state1.height = 110;
-		state1.index_x = 0;
-		state1.index_y = 0;
-		state1.start_x = 0;
-		state1.start_y = 80;
-		state1.frame_size = 6;
+			states1[6] = state1;
+			state1.width = 85;
+			state1.height = 110;
+			state1.index_x = 0;
+			state1.index_y = 0;
+			state1.start_x = 0;
+			state1.start_y = 80;
+			state1.frame_size = 6;
 		
 		//공격키4
 		state1 = new Map1();
-		states1[7] = state1;
-		state1.width = 141;
-		state1.height = 91;
-		state1.index_x = 0;
-		state1.index_y = 0;
-		state1.start_x = 0;
-		state1.start_y = 570;
-		state1.frame_size = 4;
+			states1[7] = state1;
+			state1.width = 141;
+			state1.height = 91;
+			state1.index_x = 0;
+			state1.index_y = 0;
+			state1.start_x = 0;
+			state1.start_y = 570;
+			state1.frame_size = 4;
 	}
 	
 	private Map1 getState() {
@@ -224,7 +234,7 @@ public class Character1 implements KeyListener {
 		
 
 		// 좌우 반전 처리
-		int drawX = (stateIndex == 0 || stateIndex == 2 || stateIndex == 3 || stateIndex == 4 || stateIndex == 5 || stateIndex == 6 || stateIndex == 7) ? x + state.width : x; // 대���, 우측, 점프 상태일 때 반전
+		int drawX = (stateIndex == 0 || stateIndex == 2 || stateIndex == 3 || stateIndex == 4 || stateIndex == 5 || stateIndex == 6 || stateIndex == 7) ? x + state.width : x; // 대기, 우측, 점프 상태일 때 반전
 		int drawWidth = (stateIndex == 0 || stateIndex == 2 || stateIndex == 3 || stateIndex == 4 || stateIndex == 5 || stateIndex == 6 || stateIndex == 7) ? -state.width : state.width; // 대기, 우측, 점프 상태일 때 반전
 
 		g.drawImage(sprite, drawX, characterY, 
@@ -260,8 +270,8 @@ public class Character1 implements KeyListener {
 	}
 
 	private void drawCooldownBars(Graphics g) {
-		int barWidth = 35; // 대기시간 바의 너비
-		int barHeight = 35; // 대기시간 바의 높이
+		int barWidth = 35; // 대기시간 바의 너
+		int barHeight = 35; // 대기시간 바 높이
 		int xPosition = 10; // 시작 x 좌표
 		int yPosition = 70; // 대기시간 바의 y 좌표
 
@@ -270,7 +280,7 @@ public class Character1 implements KeyListener {
 		g.setColor(Color.WHITE);
 		g.fillRect(xPosition, yPosition, (int) Math.max(0, (remainingA / (float) cooldownTimeA) * barWidth), barHeight);
 		g.setColor(Color.BLACK);
-		g.drawRect(xPosition, yPosition, barWidth, barHeight); // A키 대기시간 바 테두리
+		g.drawRect(xPosition, yPosition, barWidth, barHeight); // A키 대기시간 바 ���두리
 		g.setFont(new Font("Arial", Font.BOLD, 30)); // 폰트 크기를 30으로 설정
 		int aX = (int)(xPosition + barWidth / 2 - g.getFontMetrics().stringWidth("A") / 2);
 		int aY = (int)(yPosition + barHeight / 2 + 10);
@@ -469,39 +479,60 @@ public class Character1 implements KeyListener {
 	}
 
 	private void updateJump() {
+	    Rectangle characterBounds = new Rectangle(x, y, states1[stateIndex].width, states1[stateIndex].height);
+	    Rectangle[] platforms = Screen.getInstance().getPlatforms();
+	    
 	    if (isJumping) {
 	        if (jumpCount < jumpHeight) {
-	            y -= jumpSpeed; // 상승
+	            y -= jumpSpeed;
 	            jumpCount += jumpSpeed;
 	        } else {
-	            // 하강 로직을 부드럽게 처리
 	            if (y < 725) {
-	                y += jumpSpeed; // 하강
+	                y += jumpSpeed;
+	                characterBounds.y = y;
+	                // 모든 발판과의 충돌 체크
+	                for (Rectangle platform : platforms) {
+	                    if (characterBounds.intersects(platform)) {
+	                        y = platform.y - states1[stateIndex].height;
+	                        isJumping = false;
+	                        jumpCount = 0;
+	                        break;
+	                    }
+	                }
 	            } else {
-	                isJumping = false; // 점프 완료
-	                y = 725; // 초기 위치로 복귀
-	                jumpCount = 0; // 점프 카운트 초기화
+	                isJumping = false;
+	                y = 725;
+	                jumpCount = 0;
 	            }
 	        }
 	    } else {
-	        // 점프가 끝난 후 y를 초기 위치로 설정
-	        if (y < 725) {
-	            y += jumpSpeed; // 하강
+	        characterBounds.y = y + jumpSpeed;
+	        boolean onPlatform = false;
+	        // 모든 발판과의 충돌 체크
+	        for (Rectangle platform : platforms) {
+	            if (characterBounds.intersects(platform)) {
+	                onPlatform = true;
+	                break;
+	            }
+	        }
+	        if (!onPlatform && y < 725) {
+	            y += jumpSpeed;
 	        }
 	    }
-		// 캐릭터 이동 로직 추가
-		if (isMovingLeft) {
-			x -= moveSpeed;
-			if (x < 0) {
-				x = 0; // 화면 왼쪽 경계
-			}
-		}
-		if (isMovingRight) {
-			x += moveSpeed;
-			if (x > 1400) {
-				x = 1400; // 화면 오른쪽 경계
-			}
-		}
+	    
+	    // 캐릭터 이동 로직 추가
+	    if (isMovingLeft) {
+	        x -= moveSpeed;
+	        if (x < 0) {
+	            x = 0; // 화면 왼쪽 경계
+	        }
+	    }
+	    if (isMovingRight) {
+	        x += moveSpeed;
+	        if (x > 1400) {
+	            x = 1400; // 화면 오른쪽 경계
+	        }
+	    }
 	}
 	
 	// 공격 상태 확인 메서드 추가
@@ -524,6 +555,57 @@ public class Character1 implements KeyListener {
             case 7: return attackDamage * 4; // F키
             default: return 0;
         }
+    }
+
+    public Rectangle getHitbox() {
+        return new Rectangle(x, y, states1[stateIndex].width, states1[stateIndex].height);
+    }
+
+    public void takeDamage(int damagePercent) {
+        if (!invincible && !isDead) {  // 무적이 니고 살아있을 때만 데미지를 받음
+            hp -= (MAX_HP * damagePercent / 100);
+            
+            // 무적 상태로 설정
+            invincible = true;
+            
+            // 넉백 처리
+            if (monster1 != null) {  // monster1이 null이 아닐 때만 처리
+                if (x < monster1.getX()) {  // 몬스터 오른쪽에 있을 때
+                    x = Math.max(0, x - knockbackDistance);  // 왼쪽으로 넉백
+                } else {  // 몬스터가 왼쪽에 있을 때
+                    x = Math.min(1400, x + knockbackDistance);  // 오른쪽으로 넉백
+                }
+            }
+
+            if (hp <= 0) {
+                hp = 0;
+                isDead = true;
+                invincibilityTimer.cancel();
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(Screen.getInstance());
+                if (frame != null) {
+                    SwingUtilities.invokeLater(() -> {
+                        Main.endGame(frame, false);
+                    });
+                }
+            } else {
+                // 2초 후에 무적 해제
+                invincibilityTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        invincible = false;
+                    }
+                }, 2000);  // 2초 무적
+            }
+        }
+    }
+
+    // monster1 setter 메소드 추가
+    public void setMonster1(Monster1 monster) {
+        this.monster1 = monster;
+    }
+
+    public void setPlatformMonster(Monster1 monster) {
+        this.platformMonster = monster;
     }
 
 }

@@ -49,7 +49,6 @@ public class Main {
 
         addBackground(frame);
         addButtons(frame);
-        startGameTimer(frame); // 게임 타이머 시작
 
         frame.setVisible(true);
     }
@@ -108,36 +107,14 @@ public class Main {
         choiceFrame.setVisible(true);
     }
 
-    private static void startGameTimer(JFrame frame) {
-        JLabel timerLabel = new JLabel("Time Left: " + timeLeft);
-        timerLabel.setFont(new Font("Arial", Font.BOLD, 30));
-        timerLabel.setBounds(1300, 20, 200, 50);
-        frame.add(timerLabel);
-
-        gameTimer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                timeLeft--;
-                timerLabel.setText("Time Left: " + timeLeft);
-
-                if (timeLeft <= 0) {
-                    endGame(frame, false); // 시간 초과 시 게임 오버
-                }
-            }
-        });
-
-        gameTimer.start();
-    }
-
-    private static void endGame(JFrame frame, boolean isClear) {
-        gameTimer.stop(); // 타이머 중지
-
+    public static void endGame(JFrame frame, boolean isClear) {
         if (isClear) {
             score = timeLeft * 10; // 클리어 시 남은 시간 × 10
-            JOptionPane.showMessageDialog(frame, "Game Clear! Your Score: " + score);
+            JOptionPane.showMessageDialog(frame, "게임 클리어! 점수: " + score);
         } else {
-            score = timeLeft * 5; // 게임 오버 시 남은 시간 × 5
-            JOptionPane.showMessageDialog(frame, "Game Over! Your Score: " + score);
+            score = 0; // 게임 오버 시 점수 0점
+            JOptionPane.showMessageDialog(frame, 
+                "게임 오버!\n캐릭터 사망...\n최종 점수: " + score);
         }
 
         frame.dispose(); // 프레임 닫기
@@ -145,6 +122,11 @@ public class Main {
     }
 
     public static void clearGame(JFrame frame) {
-        endGame(frame, true); // 게임 클리어 처리
+        int remainingTime = Screen.getTimeLeft(); // Screen에서 남은 시간 가져오기
+        int finalScore = remainingTime * 100; // 남은 시간 * 100으로 점수 계산
+        JOptionPane.showMessageDialog(frame, 
+            "게임 클리어!\n남은 시간: " + remainingTime + "초\n최종 점수: " + finalScore);
+        frame.dispose();
+        System.exit(0);
     }
 }

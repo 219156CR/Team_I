@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 public class Monster1 {
     private BufferedImage sprite;
@@ -20,6 +22,16 @@ public class Monster1 {
     
     private boolean invincible = false; // 무적 상태 플래그 추가 
     private Timer invincibilityTimer = new Timer();
+    private boolean isAttacking = false;
+    private Timer attackTimer = new Timer();
+
+    private boolean movingLeft = true;  // true면 왼쪽으로, false면 오른쪽으로 이동
+
+    private int leftBound = 0;
+    private int rightBound = 1400;
+    private int monsterY = 680;  // 기본 Y 위치
+
+    private int startX = 1300;  // 초기 X 위치
 
     public Monster1() {
         loadImage();
@@ -39,13 +51,13 @@ public class Monster1 {
         // 공격 모션
         state1 = new Map1();
         Monster_states1[1] = state1;
-        state1.width = 83;
-        state1.height = 95;
+        state1.width = 185;
+        state1.height = 120;
         state1.index_x = 0;
         state1.index_y = 0;
         state1.start_x = 0;
-        state1.start_y = 80;
-        state1.frame_size = 3;
+        state1.start_y = 465;
+        state1.frame_size = 5;
         
         // 이동 타이머 설정
         timer = new Timer();
@@ -55,6 +67,8 @@ public class Monster1 {
                 updatePosition(); // 주기적으로 위치 업데이트
             }
         }, 0, 50);
+
+        x = startX;
     }
     
     private void loadImage() {
@@ -115,10 +129,19 @@ public class Monster1 {
     }
 
     public void updatePosition() {
-        if (isAlive) {
-            x -= 1; // 좌측으로 1픽셀 이동
-            if (x < 0) {
-                x = 0; // 화면 밖으로 나가지 않도록 제한
+        if (isAlive && !isAttacking) {
+            if (movingLeft) {
+                x -= 1;
+                if (x <= leftBound) {
+                    x = leftBound;
+                    movingLeft = false;
+                }
+            } else {
+                x += 1;
+                if (x >= rightBound - Monster_states1[stateIndex].width) {  // 몬스터 크기를 고려하여 조정
+                    x = rightBound - Monster_states1[stateIndex].width;
+                    movingLeft = true;
+                }
             }
         }
     }
@@ -126,23 +149,13 @@ public class Monster1 {
     public void draw(Graphics g, Screen screen) {
         if (!isAlive) return;
         
-        int y = 680;  // 기본 y 좌표
-        drawMonster(Monster_states1[stateIndex], g, screen, x, y);
+        drawMonster(Monster_states1[stateIndex], g, screen, x, monsterY);
         
         // 체력바 그리기
         g.setColor(Color.RED);
-        g.fillRect(x, y - 20, (int)(hp / (float)MAX_HP * Monster_states1[stateIndex].width), 10);
+        g.fillRect(x, monsterY - 20, (int)(hp / (float)MAX_HP * Monster_states1[stateIndex].width), 10);
         g.setColor(Color.BLACK);
-        g.drawRect(x, y - 20, Monster_states1[stateIndex].width, 10);
-        
-        /*
-        // 히트박스 그리기 (디버그용)
-        Rectangle hitbox = getHitbox();
-        g.setColor(new Color(255, 0, 0, 128)); // 반투명 빨간색
-        g.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height); // 히트박스 그리기
-        g.setColor(Color.BLACK);
-        g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height); // 히트박스 테두리 그리기
-        */
+        g.drawRect(x, monsterY - 20, Monster_states1[stateIndex].width, 10);
     }
 
     public Map1 getState() {
@@ -154,10 +167,7 @@ public class Monster1 {
     }
 
     public Rectangle getHitbox() {
-        // 현재 x 좌표를 기준으로 100x100 크기의 히트박스 생성
-        int width = 100; // 히트박스 너비
-        int height = 100; // 히트박스 높이
-        return new Rectangle(x, 680, width, height); // y 좌표는 고정
+        return new Rectangle(x, monsterY, 100, 100);
     }
 
     public boolean isAlive() {
@@ -177,27 +187,56 @@ public class Monster1 {
     }
     
     public void takeDamage(int damage) {
-    	if (!invincible) {
-    		hp -= damage;
-    		if (hp <= 0) {
-    			hp = 0;
-    			isAlive = false;
-    			System.out.println("몬스터 사망");
-    		}else {
-    			System.out.println("몬스터 HP 감소: " + hp);
-    		}
-    		invincible = true;
-    		invincibilityTimer.schedule(new TimerTask() {
-    			@Override
-    			public void run() {
-    				invincible = false;
-    			}
-    		}, 1000);
-    	}
+        if (!invincible && isAlive) {
+            hp -= damage;
+            if (hp <= 0) {
+                hp = 0;
+                isAlive = false;
+                timer.cancel();
+                invincibilityTimer.cancel();
+                
+                Screen.getInstance().checkGameClear();
+            } else {
+                System.out.println("몬스터 HP 감소: " + hp);
+                invincible = true;
+                invincibilityTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        invincible = false;
+                    }
+                }, 1000);
+            }
+        }
     }
-    public void checkCollision(Rectangle otherHitbox) {
-    	if (this.getHitbox().intersects(otherHitbox)) {
-    		takeDamage(10);
-    	}
+    public void checkCollision(Rectangle characterHitbox) {
+        if (this.getHitbox().intersects(characterHitbox)) {
+            startAttack();  // 충돌 시 공격 시작
+        }
+    }
+
+    public void startAttack() {
+        if (!isAttacking && isAlive) {
+            isAttacking = true;
+            stateIndex = 1;  // 공격 모션으로 변경
+            
+            // 3초 후 공격 상태 해제
+            attackTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    isAttacking = false;
+                    stateIndex = 0;  // 기본 모션으로 복귀
+                }
+            }, 3000);  // 3초 동안 공격 모션 유지
+        }
+    }
+
+    public void setPlatformBounds(int left, int right) {
+        this.leftBound = left;
+        this.rightBound = right;
+        this.x = left + 50;  // 발판의 시작 지점에서 약간 떨어진 위���에서 시작
+    }
+
+    public void setY(int y) {
+        this.monsterY = y;
     }
 }
