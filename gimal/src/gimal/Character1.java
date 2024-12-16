@@ -502,4 +502,27 @@ public class Character1 implements KeyListener {
 			}
 		}
 	}
+	
+	// 공격 상태 확인 메서드 추가
+    public boolean isAttacking() {
+        return isAttacking;
+    }
+
+    // 공격 히트박스 반환 메서드 추가
+    public Rectangle getAttackHitbox() {
+        return attackHitbox;
+    }
+    
+ // 현재 공격 데미지 반환 메서드 추가
+    public int getAttackDamage() {
+        // 각 공격 키에 따른 데미지 차등 적용
+        switch(stateIndex) {
+            case 4: return attackDamage; // A키
+            case 5: return attackDamage * 1; // S키
+            case 6: return attackDamage * 1; // D키
+            case 7: return attackDamage * 1; // F키
+            default: return 0;
+        }
+    }
+
 }

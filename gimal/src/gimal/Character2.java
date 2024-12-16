@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -45,6 +46,9 @@ public class Character2 implements KeyListener {
 	private final long cooldownTimeS = 3000; // S키 대기시간 3초
 	private final long cooldownTimeD = 10000; // D키 대기시간 10초
 	private final long cooldownTimeF = 60000; // F키 대기시간 60초
+	private boolean isAttacking = false;
+	private int attackDamage = 10;
+	private Rectangle attackHitbox;
 
 	public Character2() {
 		loadImage();
@@ -336,4 +340,26 @@ public class Character2 implements KeyListener {
 			}
 		}
 	}
+	// 공격 상태 확인 메서드 추가
+    public boolean isAttacking() {
+        return isAttacking;
+    }
+
+    // 공격 히트박스 반환 메서드 추가
+    public Rectangle getAttackHitbox() {
+        return attackHitbox;
+    }
+    
+ // 현재 공격 데미지 반환 메서드 추가
+    public int getAttackDamage() {
+        // 각 공격 키에 따른 데미지 차등 적용
+        switch(stateIndex) {
+            case 4: return attackDamage; // A키
+            case 5: return attackDamage * 1; // S키
+            case 6: return attackDamage * 1; // D키
+            case 7: return attackDamage * 1; // F키
+            default: return 0;
+        }
+    }
+	
 }
