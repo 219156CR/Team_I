@@ -153,3 +153,4 @@ public class Monster1 {
 		return MAX_HP;
 	}
 }
+
