@@ -53,6 +53,7 @@ public class Character1 implements KeyListener {
 	private int attackDamage = 10;
 	private Monster1 monster1;
 
+	
 	public Character1() {
 		loadImage();
 		states1 = new Map1[8];
