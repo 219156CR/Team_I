@@ -92,6 +92,16 @@ public class Screen extends Canvas implements ComponentListener {
 		// 배경 이미지 그리기
 		bg.drawImage(backgroundImage, 0, 0, dim.width, dim.height, this);
 		
+		// Mchoise가 1일 경우 버튼 이미지 그리기
+		if (Mchoise.getSelectedMap() == 1) {
+			Image buttonImage = new ImageIcon("image/버튼.png").getImage();
+			if (buttonImage != null) {
+				bg.drawImage(buttonImage, 650, 1100, this);
+			} else {
+				System.out.println("버튼 이미지를 로드할 수 없습니다.");
+			}
+		}
+		
 		// 캐릭터 선택에 따라 그리기
 		switch (Cchoise.getSelectedCharacter()) {
 			case 1:
