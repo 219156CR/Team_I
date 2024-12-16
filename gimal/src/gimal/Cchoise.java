@@ -22,7 +22,7 @@ public class Cchoise {
         Image backgroundImage = backgroundIcon.getImage().getScaledInstance(frame.getWidth(), frame.getHeight(), Image.SCALE_SMOOTH); // 배경 크기 조정
         JLabel backgroundLabel = new JLabel(new ImageIcon(backgroundImage));
 
-        // 캐릭터 이미지 불러오기
+        
         ImageIcon image1 = new ImageIcon("image/버튼.PNG");
         ImageIcon image2 = new ImageIcon("image/버튼2.PNG");
         ImageIcon image3 = new ImageIcon("image/버튼.PNG");

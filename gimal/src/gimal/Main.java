@@ -23,7 +23,7 @@ public class Main {
 
         Timer introTimer = new Timer(5000, e -> {
             introWindow.dispose();
-            soundManager.playSound("sound/메이플스토리 BGM - 신버전 로그인.mp3"); // 인트로 종료 후 소리 재생
+            soundManager.playSound("sound/메이플스토리 BGM - 신버전 로그인.wav"); // 인트로 종료 후 소리 재생
             showGameFrame();
         });
 
