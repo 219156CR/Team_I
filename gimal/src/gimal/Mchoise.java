@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import java.awt.Image;
 import java.awt.event.*;
+import java.awt.Color;
 
 public class Mchoise {
     private static int selectedMap = 0; // 선택된 맵 저장
@@ -34,13 +35,16 @@ public class Mchoise {
 
         // 각 이미지에 대한 JLabel 생성
         JLabel imageLabel1 = new JLabel(image1);
+        imageLabel1.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5)); // 굵은 검은 테두리 추가
         JLabel imageLabel2 = new JLabel(image2);
+        imageLabel2.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5)); // 굵은 검은 테두리 추가
         JLabel imageLabel3 = new JLabel(image3);
+        imageLabel3.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5)); // 굵은 검은 테두리 추가
 
         // 이미지 라벨 위치 설정
-        imageLabel1.setBounds(100, 600, 200, 60);
-        imageLabel2.setBounds(600, 600, 200, 60);
-        imageLabel3.setBounds(1100, 600, 200, 60);
+        imageLabel1.setBounds(150, 600, 200, 60);
+        imageLabel2.setBounds(650, 600, 200, 60);
+        imageLabel3.setBounds(1150, 600, 200, 60);
 
         // 첫 번째 맵 선택 이벤트
         imageLabel1.addMouseListener(new MouseAdapter() {

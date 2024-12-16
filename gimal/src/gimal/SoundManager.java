@@ -1,27 +1,26 @@
 package gimal;
 
-import javazoom.jl.player.Player;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
+import javax.sound.sampled.*;
+import java.io.File;
+import java.io.IOException;
 
 public class SoundManager {
-    private Player player;
+    private Clip clip;
 
-    public void playSound(String filePath) {
-        new Thread(() -> {
-            try (FileInputStream fis = new FileInputStream(filePath);
-                 BufferedInputStream bis = new BufferedInputStream(fis)) {
-                player = new Player(bis);
-                player.play();
-            } catch (Exception e) {
-                System.out.println("Error playing sound: " + e.getMessage());
-            }
-        }).start();
+    public void playSound(String soundFile) {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundFile));
+            clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
     }
 
     public void stopSound() {
-        if (player != null) {
-            player.close();
+        if (clip != null && clip.isRunning()) {
+            clip.stop();
         }
     }
 }

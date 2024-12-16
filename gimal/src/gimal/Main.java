@@ -1,6 +1,7 @@
 package gimal;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -80,6 +81,10 @@ public class Main {
     private static JLabel createButton(String imagePath, int index, JFrame frame) {
         JLabel buttonLabel = new JLabel(new ImageIcon(imagePath));
         buttonLabel.setBounds(100 + (index * 600), 600, 300, 60);
+        
+        // 검은 테두리 추가
+        buttonLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); // 두께 2의 검은 테두리
+
         buttonLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (index == 0) {
