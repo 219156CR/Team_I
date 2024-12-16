@@ -194,16 +194,13 @@ public class Character1 implements KeyListener {
 		drawCharacter(getState(), g, screen);
 		drawHealthBars(g);
 		drawCooldownBars(g);
-		
-		// 몬스터와의 충돌 체크
-		checkCollisionWithMonster();
-
+		/*
 		// 히트박스 표시 (디버그용)
-		Rectangle hitbox = getHitbox();
-		g.setColor(new Color(255, 0, 0, 128)); // 반투명 빨간색
-		g.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height); // 히트박스 그리기
-		g.setColor(Color.BLACK);
-		g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height); // 히트박스 테두리 그리기
+		if (isAttacking && attackHitbox != null) {
+			g.setColor(new Color(255, 0, 0, 128));
+			g.fillRect(attackHitbox.x, attackHitbox.y, attackHitbox.width, attackHitbox.height);
+		}
+		*/
 	}
 	
 	private void drawCharacter(Map1 state, Graphics g, Screen screen) {
@@ -227,7 +224,7 @@ public class Character1 implements KeyListener {
 		
 
 		// 좌우 반전 처리
-		int drawX = (stateIndex == 0 || stateIndex == 2 || stateIndex == 3 || stateIndex == 4 || stateIndex == 5 || stateIndex == 6 || stateIndex == 7) ? x + state.width : x; // 대기, 우측, 점프 상태일 때 반전
+		int drawX = (stateIndex == 0 || stateIndex == 2 || stateIndex == 3 || stateIndex == 4 || stateIndex == 5 || stateIndex == 6 || stateIndex == 7) ? x + state.width : x; // 대���, 우측, 점프 상태일 때 반전
 		int drawWidth = (stateIndex == 0 || stateIndex == 2 || stateIndex == 3 || stateIndex == 4 || stateIndex == 5 || stateIndex == 6 || stateIndex == 7) ? -state.width : state.width; // 대기, 우측, 점프 상태일 때 반전
 
 		g.drawImage(sprite, drawX, characterY, 
@@ -521,31 +518,12 @@ public class Character1 implements KeyListener {
     public int getAttackDamage() {
         // 각 공격 키에 따른 데미지 차등 적용
         switch(stateIndex) {
-            case 4: return attackDamage * 1; // A키
-            case 5: return attackDamage * 1; // S키
-            case 6: return attackDamage * 2; // D키
-            case 7: return attackDamage * 3; // F키
+            case 4: return attackDamage; // A키
+            case 5: return attackDamage * 2; // S키
+            case 6: return attackDamage * 3; // D키
+            case 7: return attackDamage * 4; // F키
             default: return 0;
         }
-    }
-
-    public void checkCollisionWithMonster() {
-        if (monster1 != null && monster1.isAlive() && this.getHitbox().intersects(monster1.getHitbox())) {
-            int damage = (int) (MAX_HP * 0.1); // HP의 10% 계산
-            takeDamage(damage); // 캐릭터 HP 감소
-        }
-    }
-
-    private void takeDamage(int damage) {
-        hp -= damage;
-        if (hp < 0) {
-            hp = 0; // HP가 0 이하로 떨어지지 않도록
-        }
-    }
-
-    public Rectangle getHitbox() {
-        // 현재 x, y 좌표를 기준으로 50x100 크기의 히트박스 생성 (적절한 크기로 조정 가능)
-        return new Rectangle(x, y, 50, 100); // 히트박스 크기 조정
     }
 
 }

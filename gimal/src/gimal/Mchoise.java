@@ -9,7 +9,7 @@ public class Mchoise {
     private static int selectedMap = 0; // 선택된 맵 저장
     private static int selectedMonster = 0; // 선택된 몬스터 저장
 
-    // 선택된 맵 ID를 반환하는 메서드
+    // 선택된 맵 반환
     public static int getSelectedMap() {
         return selectedMap;
     }
