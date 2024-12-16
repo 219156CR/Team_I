@@ -1,4 +1,3 @@
-// Monster1.java
 package gimal;
 
 import java.awt.*;
@@ -136,12 +135,14 @@ public class Monster1 {
         g.setColor(Color.BLACK);
         g.drawRect(x, y - 20, Monster_states1[stateIndex].width, 10);
         
+        /*
         // 히트박스 그리기 (디버그용)
         Rectangle hitbox = getHitbox();
         g.setColor(new Color(255, 0, 0, 128)); // 반투명 빨간색
         g.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height); // 히트박스 그리기
         g.setColor(Color.BLACK);
         g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height); // 히트박스 테두리 그리기
+        */
     }
 
     public Map1 getState() {

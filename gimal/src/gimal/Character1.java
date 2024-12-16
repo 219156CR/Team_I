@@ -194,12 +194,13 @@ public class Character1 implements KeyListener {
 		drawCharacter(getState(), g, screen);
 		drawHealthBars(g);
 		drawCooldownBars(g);
-		
+		/*
 		// 히트박스 표시 (디버그용)
 		if (isAttacking && attackHitbox != null) {
 			g.setColor(new Color(255, 0, 0, 128));
 			g.fillRect(attackHitbox.x, attackHitbox.y, attackHitbox.width, attackHitbox.height);
 		}
+		*/
 	}
 	
 	private void drawCharacter(Map1 state, Graphics g, Screen screen) {
@@ -518,9 +519,9 @@ public class Character1 implements KeyListener {
         // 각 공격 키에 따른 데미지 차등 적용
         switch(stateIndex) {
             case 4: return attackDamage; // A키
-            case 5: return attackDamage * 1; // S키
-            case 6: return attackDamage * 1; // D키
-            case 7: return attackDamage * 1; // F키
+            case 5: return attackDamage * 2; // S키
+            case 6: return attackDamage * 3; // D키
+            case 7: return attackDamage * 4; // F키
             default: return 0;
         }
     }

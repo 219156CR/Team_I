@@ -13,7 +13,7 @@ import java.util.TimerTask;
 import javax.swing.ImageIcon;
 
 public class Screen extends Canvas implements ComponentListener {
-	
+
 	private Graphics bg;
 	private Image offScreen;
 	private Image backgroundImage;
@@ -25,10 +25,10 @@ public class Screen extends Canvas implements ComponentListener {
     private Character2 character2 = new Character2();
     private Character3 character3 = new Character3();
 	private int countNumber = 0;
-	
+
 	public Screen() {
 		addComponentListener(this);
-		
+
 		// 배경 이미지 로드
 		switch (Mchoise.getSelectedMap()) {
 			case 1:
@@ -44,7 +44,7 @@ public class Screen extends Canvas implements ComponentListener {
 				backgroundImage = new ImageIcon("IMAGE/필드 배경1.jpg").getImage();
 				break;
 		}
-		
+
 		// 선택된 캐릭터에 따라 키 리스너 추가
 		switch (Cchoise.getSelectedCharacter()) {
 			case 1:
@@ -59,12 +59,12 @@ public class Screen extends Canvas implements ComponentListener {
 			default:
 				break;
 		}
-		
+
 		setFocusable(true);
-		
+
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
-			
+
 			@Override
 			public void run() {
 				repaint();
@@ -72,25 +72,24 @@ public class Screen extends Canvas implements ComponentListener {
 			}
 		}, 0, 1);
 	}
-	
+
 	public void counting() {
 		this.countNumber++;
 	}
-	
+
 	public int getCount() {
 		return this.countNumber;
 	}
-	
+
 	private void initBuffer() {
 		this.dim = getSize();
 		this.offScreen = createImage(dim.width, dim.height);
 		this.bg = this.offScreen.getGraphics();
 	}
-	
+
 	private void checkCollisions() {
         // 선택된 캐릭터에 따라 충돌 처리
 		Object activeCharacter = null;
-
 		switch (Cchoise.getSelectedCharacter()) {
 		    case 1:
 		        activeCharacter = character1;
@@ -102,12 +101,10 @@ public class Screen extends Canvas implements ComponentListener {
 		        activeCharacter = character3;
 		        break;
         }
-
         // 캐릭터의 공격 히트박스가 있을 때만 충돌 검사
         if (activeCharacter != null && ((Character1) activeCharacter).isAttacking() && monster1 != null) {
             Rectangle characterHitbox = ((Character1) activeCharacter).getAttackHitbox();
             Rectangle monsterHitbox = monster1.getHitbox();
-
             // 히트박스 충돌 검사
             if (characterHitbox != null && characterHitbox.intersects(monsterHitbox)) {
                 // 충돌 시 몬스터에게 데미지 적용
@@ -121,21 +118,8 @@ public class Screen extends Canvas implements ComponentListener {
 		bg.clearRect(0, 0, dim.width, dim.height);
 		// 배경 이미지 그리기
 		bg.drawImage(backgroundImage, 0, 0, dim.width, dim.height, this);
-<<<<<<< HEAD
 		
-		// Mchoise가 1일 경우 버튼 이미지 그리기
-		if (Mchoise.getSelectedMap() == 1) {
-			Image buttonImage = new ImageIcon("image/버튼.png").getImage();
-			if (buttonImage != null) {
-				bg.drawImage(buttonImage, 650, 1100, this);
-			} else {
-				System.out.println("버튼 이미지를 로드할 수 없습니다.");
-			}
-		}
-		
-=======
 		checkCollisions();
->>>>>>> branch 'main' of https://github.com/219156CR/Team_I.git
 		// 캐릭터 선택에 따라 그리기
 		switch (Cchoise.getSelectedCharacter()) {
 			case 1:
@@ -150,7 +134,7 @@ public class Screen extends Canvas implements ComponentListener {
 			default:
 				break;
 		}
-		
+
 		// 몬스터 선택에 따라 그리기
 		if (monster1 != null) {
 			monster1.draw(bg, this);
@@ -161,15 +145,15 @@ public class Screen extends Canvas implements ComponentListener {
 		if (monster3 != null) {
 			monster3.draw(bg, 300, 650, this);
 		}
-		
+
 		g.drawImage(offScreen, 0, 0, this);
 	}
-	
+
 	@Override
 	public void update(Graphics g) {
 		paint(g);
 	}
-	
+
 	@Override
 	public void componentResized(ComponentEvent e) {
 		initBuffer();
@@ -178,21 +162,21 @@ public class Screen extends Canvas implements ComponentListener {
 	@Override
 	public void componentMoved(ComponentEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void componentShown(ComponentEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void componentHidden(ComponentEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	// Monster1 설정 메서드
 	public void setMonster1(Monster1 monster) {
 		this.monster1 = monster;
