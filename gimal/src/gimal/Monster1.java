@@ -63,7 +63,7 @@ public class Monster1 {
 			public void run() {
 				updatePosition(); // 주기적으로 위치 업데이트
 			}
-		}, 0, 50); // 100ms마다 이동 (0.1초)
+		}, 0, 50); // 50ms마다 이동 (0.5초)
 	}
 	
 	private void loadImage() {

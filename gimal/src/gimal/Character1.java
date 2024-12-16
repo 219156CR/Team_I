@@ -342,12 +342,6 @@ public class Character1 implements KeyListener {
 					int hitboxX = x + (stateIndex == 1 ? -hitboxWidth : states1[4].width);
 					attackHitbox = new Rectangle(hitboxX, y, hitboxWidth, hitboxHeight);
 					
-					// 몬스터 체력 감소 및 물러나기 로직 추가
-					if (monster1 != null && attackHitbox.intersects(monster1.getHitbox())) {
-						monster1.takeDamage((int)(monster1.getMaxHp() * 0.10)); // 10% 체력 감소
-						monster1.setX(monster1.getX() - 10); // 몬스터를 10픽셀 뒤로 이동
-					}
-					
 					mp -= MAX_MP * 0.01;
 					if (mp < 0) {
 						mp = 0;
@@ -366,12 +360,6 @@ public class Character1 implements KeyListener {
 					int hitboxHeight = 20;
 					int hitboxX = x + (stateIndex == 1 ? -hitboxWidth : states1[4].width);
 					attackHitbox = new Rectangle(hitboxX, y, hitboxWidth, hitboxHeight);
-					
-					// 몬스터 체력 감소 및 물러나기 로직 추가
-					if (monster1 != null && attackHitbox.intersects(monster1.getHitbox())) {
-						monster1.takeDamage((int)(monster1.getMaxHp() * 0.10)); // 10% 체력 감소
-						monster1.setX(monster1.getX() - 10); // 몬스터를 10픽셀 뒤로 이동
-					}
 					
 					mp -= MAX_MP * 0.05;
 					if (mp < 0) {
@@ -392,12 +380,6 @@ public class Character1 implements KeyListener {
 					int hitboxX = x + (stateIndex == 1 ? -hitboxWidth : states1[4].width);
 					attackHitbox = new Rectangle(hitboxX, y, hitboxWidth, hitboxHeight);
 					
-					// 몬스터 체력 감소 및 물러나기 로직 추가
-					if (monster1 != null && attackHitbox.intersects(monster1.getHitbox())) {
-						monster1.takeDamage((int)(monster1.getMaxHp() * 0.10)); // 10% 체력 감소
-						monster1.setX(monster1.getX() - 10); // 몬스터를 10픽셀 뒤로 이동
-					}
-					
 					mp -= MAX_MP * 0.1;
 					if (mp < 0) {
 						mp = 0;
@@ -416,12 +398,6 @@ public class Character1 implements KeyListener {
 					int hitboxHeight = 100;
 					int hitboxX = x + (stateIndex == 1 ? -hitboxWidth : states1[4].width);
 					attackHitbox = new Rectangle(hitboxX, y, hitboxWidth, hitboxHeight);
-					
-					// 몬스터 체력 감소 및 물러나기 로직 추가
-					if (monster1 != null && attackHitbox.intersects(monster1.getHitbox())) {
-						monster1.takeDamage((int)(monster1.getMaxHp() * 0.10)); // 10% 체력 감소
-						monster1.setX(monster1.getX() - 10); // 몬스터를 10픽셀 뒤로 이동
-					}
 					
 					mp -= MAX_MP * 0.5;
 					if (mp < 0) {
