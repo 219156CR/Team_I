@@ -1,7 +1,6 @@
 package gimal;
 
 import javax.swing.*;
-
 import java.awt.Image;
 import java.awt.event.*;
 import java.awt.Color;
@@ -37,10 +36,10 @@ public class Mchoise {
         };
         backgroundPanel.setLayout(null);
 
-        // 맵 이미지 불러오기 (버튼 크기는 그대로 유지)
-        ImageIcon image1 = new ImageIcon("image/버튼.PNG");
-        ImageIcon image2 = new ImageIcon("image/버튼2.PNG");
-        ImageIcon image3 = new ImageIcon("image/버튼.PNG");
+        // 맵 이미지 불러오기 (이미지 크기 조정)
+        ImageIcon image1 = new ImageIcon(new ImageIcon("image/선택1.PNG").getImage().getScaledInstance(200, 60, Image.SCALE_SMOOTH));
+        ImageIcon image2 = new ImageIcon(new ImageIcon("image/선택2.PNG").getImage().getScaledInstance(200, 60, Image.SCALE_SMOOTH));
+        ImageIcon image3 = new ImageIcon(new ImageIcon("image/선택3.PNG").getImage().getScaledInstance(200, 60, Image.SCALE_SMOOTH));
 
         // 각 이미지에 대한 JLabel 생성
         JLabel imageLabel1 = new JLabel(image1);
@@ -126,6 +125,4 @@ public class Mchoise {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
-
 }
-

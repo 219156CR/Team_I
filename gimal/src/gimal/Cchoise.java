@@ -22,23 +22,34 @@ public class Cchoise {
         Image backgroundImage = backgroundIcon.getImage().getScaledInstance(frame.getWidth(), frame.getHeight(), Image.SCALE_SMOOTH); // 배경 크기 조정
         JLabel backgroundLabel = new JLabel(new ImageIcon(backgroundImage));
 
-        
-        ImageIcon image1 = new ImageIcon("image/버튼.PNG");
-        ImageIcon image2 = new ImageIcon("image/버튼2.PNG");
-        ImageIcon image3 = new ImageIcon("image/버튼.PNG");
+        // 버튼 이미지를 원하는 크기로 조정
+        int buttonWidth = 200;  // 버튼 가로 크기 (픽셀)
+        int buttonHeight = 60; // 버튼 세로 크기 (픽셀)
 
-        // 각 이미지에 대한 JLabel 생성 (버튼 이미지 크기는 변경하지 않음)
-        JLabel imageLabel1 = new JLabel(image1);
+        ImageIcon originalImage1 = new ImageIcon("image/선택1.PNG");
+        ImageIcon originalImage2 = new ImageIcon("image/선택2.PNG");
+        ImageIcon originalImage3 = new ImageIcon("image/선택3.PNG");
+
+        Image scaledImage1 = originalImage1.getImage().getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
+        Image scaledImage2 = originalImage2.getImage().getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
+        Image scaledImage3 = originalImage3.getImage().getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
+
+        ImageIcon resizedImage1 = new ImageIcon(scaledImage1);
+        ImageIcon resizedImage2 = new ImageIcon(scaledImage2);
+        ImageIcon resizedImage3 = new ImageIcon(scaledImage3);
+
+        // 각 이미지에 대한 JLabel 생성
+        JLabel imageLabel1 = new JLabel(resizedImage1);
         imageLabel1.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5)); // 굵은 검은 테두리 추가
-        JLabel imageLabel2 = new JLabel(image2);
+        JLabel imageLabel2 = new JLabel(resizedImage2);
         imageLabel2.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5)); // 굵은 검은 테두리 추가
-        JLabel imageLabel3 = new JLabel(image3);
+        JLabel imageLabel3 = new JLabel(resizedImage3);
         imageLabel3.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5)); // 굵은 검은 테두리 추가
 
         // 이미지 라벨 위치 설정
-        imageLabel1.setBounds(150, 600, 200, 60);
-        imageLabel2.setBounds(650, 600, 200, 60);
-        imageLabel3.setBounds(1150, 600, 200, 60);
+        imageLabel1.setBounds(150, 600, buttonWidth, buttonHeight);
+        imageLabel2.setBounds(650, 600, buttonWidth, buttonHeight);
+        imageLabel3.setBounds(1150, 600, buttonWidth, buttonHeight);
 
         // 첫 번째 캐릭터 선택 이벤트
         imageLabel1.addMouseListener(new MouseAdapter() {
