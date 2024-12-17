@@ -562,7 +562,7 @@ public class Character3 implements KeyListener {
     }
 
     public void takeDamage(int damagePercent) {
-        if (!invincible && !isDead) {  // 무적이 니고 살아있을 때만 데미지를 받음
+        if (!invincible && !isDead) {  // 무적기능과 살아있을 때만 데미지를 받음
             hp -= (MAX_HP * damagePercent / 100);
             
             // 무적 상태로 설정

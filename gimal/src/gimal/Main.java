@@ -9,7 +9,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Main {
-    private static Timer gameTimer;
     private static int timeLeft = 60; // 게임 시간 (초)
     private static int score = 0;    // 점수 기본값
     private static SoundManager soundManager = new SoundManager(); // 사운드 매니저 추가

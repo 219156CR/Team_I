@@ -233,7 +233,7 @@ public class Monster2 {
     public void setPlatformBounds(int left, int right) {
         this.leftBound = left;
         this.rightBound = right;
-        this.x = left + 50;  // 발판의 시작 지점에서 약간 떨어진 위치에서 시작
+        this.x = left + 50;  // 발판의 시작 지점에서 약간 떨어진 부분에서 시작
     }
 
     public void setY(int y) {

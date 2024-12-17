@@ -141,7 +141,7 @@ public class Screen extends Canvas implements ComponentListener {
 		}
 	}
 
-	// 충돌 처리를 별도 메소���로 분리
+	// 충돌 처리 분리
 	private void handleCharacterCollisions(Character1 character) {  // Character1이나 Character2 모두 처리 가능
 		if (monster1 != null && monster1.isAlive()) {
 			Rectangle characterHitbox = character.getHitbox();
@@ -178,8 +178,8 @@ public class Screen extends Canvas implements ComponentListener {
 			}
 		}
 	}
-
-	// Character2를 위한 오버로드된 메소드 수정
+	
+	// 충돌 처리 분리
 	private void handleCharacterCollisions(Character2 character) {
 		// monster1 충돌 체크
 		if (monster1 != null && monster1.isAlive()) {
@@ -217,7 +217,7 @@ public class Screen extends Canvas implements ComponentListener {
 		}
 	}
 
-	// Character3를 위한 오버로드된 메소드 추가
+	// 충돌 처리 분리
 	private void handleCharacterCollisions(Character3 character) {
 		// monster1 충돌 체크
 		if (monster1 != null && monster1.isAlive()) {

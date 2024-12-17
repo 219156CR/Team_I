@@ -7,7 +7,7 @@ import java.awt.event.*;
 public class Cchoise {
     private static int selectedCharacter = 0; // 선택된 캐릭터 저장
 
-    // 선택된 캐릭터 ID를 반환하는 메서드
+    // 선택된 캐릭터 번호를 반환
     public static int getSelectedCharacter() {
         return selectedCharacter;
     }
@@ -23,8 +23,8 @@ public class Cchoise {
         JLabel backgroundLabel = new JLabel(new ImageIcon(backgroundImage));
 
         // 버튼 이미지를 원하는 크기로 조정
-        int buttonWidth = 200;  // 버튼 가로 크기 (픽셀)
-        int buttonHeight = 60; // 버튼 세로 크기 (픽셀)
+        int buttonWidth = 200;  // 버튼 가로 크기
+        int buttonHeight = 60; // 버튼 세로 크기
 
         ImageIcon originalImage1 = new ImageIcon("image/선택1.PNG");
         ImageIcon originalImage2 = new ImageIcon("image/선택2.PNG");
