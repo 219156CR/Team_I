@@ -141,32 +141,8 @@ public class Screen extends Canvas implements ComponentListener {
 		}
 	}
 
-	// 충돌 처리를 별도 메소드로 분리
+	// 충돌 처리를 별도 메소���로 분리
 	private void handleCharacterCollisions(Character1 character) {  // Character1이나 Character2 모두 처리 가능
-		if (monster1 != null && monster1.isAlive()) {
-			Rectangle characterHitbox = character.getHitbox();
-			Rectangle monsterHitbox = monster1.getHitbox();
-			
-			if (characterHitbox.intersects(monsterHitbox)) {
-				monster1.checkCollision(characterHitbox);
-				character.takeDamage(20);
-			}
-			
-			if (character.isAttacking()) {
-				Rectangle attackHitbox = character.getAttackHitbox();
-				if (attackHitbox != null && attackHitbox.intersects(monsterHitbox)) {
-					monster1.takeDamage(character.getAttackDamage());
-				}
-			}
-		}
-
-		// 나머지 몬스터들에 대한 충돌 체크도 동일한 방식으로 처리
-		// platformMonster, monster2, monster3 체크 코드...
-	}
-
-	// Character2를 위한 오버로드된 메소드 수정
-	private void handleCharacterCollisions(Character2 character) {
-		// monster1 충돌 체크
 		if (monster1 != null && monster1.isAlive()) {
 			Rectangle characterHitbox = character.getHitbox();
 			Rectangle monsterHitbox = monster1.getHitbox();
@@ -197,6 +173,44 @@ public class Screen extends Canvas implements ComponentListener {
 			if (character.isAttacking()) {
 				Rectangle attackHitbox = character.getAttackHitbox();
 				if (attackHitbox != null && attackHitbox.intersects(monsterHitbox)) {
+					platformMonster.takeDamage(character.getAttackDamage());
+				}
+			}
+		}
+	}
+
+	// Character2를 위한 오버로드된 메소드 수정
+	private void handleCharacterCollisions(Character2 character) {
+		// monster1 충돌 체크
+		if (monster1 != null && monster1.isAlive()) {
+			Rectangle characterHitbox = character.getHitbox();
+			Rectangle monsterHitbox = monster1.getHitbox();
+			
+			if (characterHitbox.intersects(monsterHitbox)) {
+				monster1.checkCollision(characterHitbox);
+				character.takeDamage(20);
+			}
+			
+			if (character.isAttacking()) {
+				Rectangle attackHitbox = character.getAttackHitbox();
+				if (attackHitbox != null && attackHitbox.intersects(monsterHitbox)) {
+					monster1.takeDamage(character.getAttackDamage());
+				}
+			}
+		}
+
+		// platformMonster 충돌 체크 추가
+		if (platformMonster != null && platformMonster.isAlive()) {
+			Rectangle characterHitbox = character.getHitbox();
+			
+			if (characterHitbox.intersects(platformMonster.getHitbox())) {
+				platformMonster.checkCollision(characterHitbox);
+				character.takeDamage(20);
+			}
+			
+			if (character.isAttacking()) {
+				Rectangle attackHitbox = character.getAttackHitbox();
+				if (attackHitbox != null && attackHitbox.intersects(platformMonster.getHitbox())) {
 					platformMonster.takeDamage(character.getAttackDamage());
 				}
 			}
@@ -275,7 +289,7 @@ public class Screen extends Canvas implements ComponentListener {
 				break;
 		}
 
-		// 몬스터 선택에 따라 그리기
+		// 몬스터 선택에 ���라 그리기
 		if (monster1 != null) {
 			monster1.draw(bg, this);
 		}
