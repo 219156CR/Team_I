@@ -15,6 +15,9 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import java.awt.Font;
 import java.awt.Color;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class Screen extends Canvas implements ComponentListener {
 
@@ -46,13 +49,13 @@ public class Screen extends Canvas implements ComponentListener {
 		// 배경 이미지 로드
 		switch (Mchoise.getSelectedMap()) {
 			case 1:
-				backgroundImage = new ImageIcon("IMAGE/필드 배경2.jpg").getImage();
+				backgroundImage = new ImageIcon("IMAGE/필드 배경1.jpg").getImage();
 				break;
 			case 2:
-				backgroundImage = new ImageIcon("IMAGE/필드 배경3.jpg").getImage();
+				backgroundImage = new ImageIcon("IMAGE/필드 배경2.jpg").getImage();
 				break;
 			case 3:
-				backgroundImage = new ImageIcon("IMAGE/필드 배경1.jpg").getImage();
+				backgroundImage = new ImageIcon("IMAGE/필드 배경3.jpg").getImage();
 				break;
 			default:
 				backgroundImage = new ImageIcon("IMAGE/필드 배경1.jpg").getImage();
@@ -141,117 +144,113 @@ public class Screen extends Canvas implements ComponentListener {
 		}
 	}
 
-	// 충돌 처리 분리
-	private void handleCharacterCollisions(Character1 character) {  // Character1이나 Character2 모두 처리 가능
-		if (monster1 != null && monster1.isAlive()) {
-			Rectangle characterHitbox = character.getHitbox();
-			Rectangle monsterHitbox = monster1.getHitbox();
-			
-			if (characterHitbox.intersects(monsterHitbox)) {
-				monster1.checkCollision(characterHitbox);
-				character.takeDamage(20);
-			}
-			
-			if (character.isAttacking()) {
-				Rectangle attackHitbox = character.getAttackHitbox();
-				if (attackHitbox != null && attackHitbox.intersects(monsterHitbox)) {
-					monster1.takeDamage(character.getAttackDamage());
-				}
-			}
-		}
+	private void handleCharacterCollisions(Character1 character) {
+	    // monster1 또는 monster2 또는 monster3와의 충돌 체크
+	    if (Mchoise.getSelectedMap() == 1 && monster1 != null && monster1.isAlive()) {
+	        checkMonsterCollision(character, monster1);
+	    } else if (Mchoise.getSelectedMap() == 2 && monster2 != null) {
+	        Rectangle characterHitbox = character.getHitbox();
+	        Rectangle monsterHitbox = monster2.getHitbox();
 
-		// platformMonster 충돌 체크 추가
+	        if (characterHitbox.intersects(monsterHitbox)) {
+	            monster2.checkCollision(characterHitbox);
+	            character.takeDamage(20);
+	        }
+
+	        if (character.isAttacking()) {
+	            Rectangle attackHitbox = character.getAttackHitbox();
+	            if (attackHitbox != null && attackHitbox.intersects(monsterHitbox)) {
+	                monster2.takeDamage(character.getAttackDamage());
+	            }
+	        }
+	    } else if (Mchoise.getSelectedMap() == 3 && monster3 != null) { // monster3 추가
+	        Rectangle characterHitbox = character.getHitbox();
+	        Rectangle monsterHitbox = monster3.getHitbox();
+
+	        if (characterHitbox.intersects(monsterHitbox)) {
+	            monster3.checkCollision(characterHitbox);
+	            character.takeDamage(20);
+	        }
+
+	        if (character.isAttacking()) {
+	            Rectangle attackHitbox = character.getAttackHitbox();
+	            if (attackHitbox != null && attackHitbox.intersects(monsterHitbox)) {
+	                monster3.takeDamage(character.getAttackDamage());
+	            }
+	        }
+	    }
+
+		// platformMonster 충돌 체크
 		if (platformMonster != null && platformMonster.isAlive()) {
-			Rectangle characterHitbox = character.getHitbox();
-			Rectangle monsterHitbox = platformMonster.getHitbox();
-			
-			if (characterHitbox.intersects(monsterHitbox)) {
-				platformMonster.checkCollision(characterHitbox);
-				character.takeDamage(20);
-			}
-			
-			if (character.isAttacking()) {
-				Rectangle attackHitbox = character.getAttackHitbox();
-				if (attackHitbox != null && attackHitbox.intersects(monsterHitbox)) {
-					platformMonster.takeDamage(character.getAttackDamage());
-				}
-			}
+			checkMonsterCollision(character, platformMonster);
 		}
 	}
-	
-	// 충돌 처리 분리
+
+	// Character2를 위한 오버로드된 메소드
 	private void handleCharacterCollisions(Character2 character) {
-		// monster1 충돌 체크
-		if (monster1 != null && monster1.isAlive()) {
+		// monster1 또는 monster2와의 충돌 체크
+		if (Mchoise.getSelectedMap() == 1 && monster1 != null && monster1.isAlive()) {
+			checkMonsterCollision(character, monster1);
+		} else if (Mchoise.getSelectedMap() == 2 && monster2 != null) {
 			Rectangle characterHitbox = character.getHitbox();
-			Rectangle monsterHitbox = monster1.getHitbox();
+			Rectangle monsterHitbox = monster2.getHitbox();
 			
 			if (characterHitbox.intersects(monsterHitbox)) {
-				monster1.checkCollision(characterHitbox);
+				monster2.checkCollision(characterHitbox);
 				character.takeDamage(20);
 			}
 			
 			if (character.isAttacking()) {
 				Rectangle attackHitbox = character.getAttackHitbox();
 				if (attackHitbox != null && attackHitbox.intersects(monsterHitbox)) {
-					monster1.takeDamage(character.getAttackDamage());
-				}
-			}
-		}
-
-		// platformMonster 충돌 체크 추가
-		if (platformMonster != null && platformMonster.isAlive()) {
-			Rectangle characterHitbox = character.getHitbox();
-			
-			if (characterHitbox.intersects(platformMonster.getHitbox())) {
-				platformMonster.checkCollision(characterHitbox);
-				character.takeDamage(20);
-			}
-			
-			if (character.isAttacking()) {
-				Rectangle attackHitbox = character.getAttackHitbox();
-				if (attackHitbox != null && attackHitbox.intersects(platformMonster.getHitbox())) {
-					platformMonster.takeDamage(character.getAttackDamage());
-				}
-			}
-		}
-	}
-
-	// 충돌 처리 분리
-	private void handleCharacterCollisions(Character3 character) {
-		// monster1 충돌 체크
-		if (monster1 != null && monster1.isAlive()) {
-			Rectangle characterHitbox = character.getHitbox();
-			Rectangle monsterHitbox = monster1.getHitbox();
-			
-			if (characterHitbox.intersects(monsterHitbox)) {
-				monster1.checkCollision(characterHitbox);
-				character.takeDamage(20);
-			}
-			
-			if (character.isAttacking()) {
-				Rectangle attackHitbox = character.getAttackHitbox();
-				if (attackHitbox != null && attackHitbox.intersects(monsterHitbox)) {
-					monster1.takeDamage(character.getAttackDamage());
+					monster2.takeDamage(character.getAttackDamage());
 				}
 			}
 		}
 
 		// platformMonster 충돌 체크
 		if (platformMonster != null && platformMonster.isAlive()) {
-			Rectangle characterHitbox = character.getHitbox();
-			Rectangle monsterHitbox = platformMonster.getHitbox();
-			
-			if (characterHitbox.intersects(monsterHitbox)) {
-				platformMonster.checkCollision(characterHitbox);
-				character.takeDamage(20);
+			checkMonsterCollision(character, platformMonster);
+		}
+	}
+
+	// Character3를 위한 오버로드된 메소드도 동일하게 추가
+	private void handleCharacterCollisions(Character3 character) {
+		// 위와 동일한 코드
+	}
+
+	// Monster와의 충돌 체크를 위한 헬퍼 메소드
+	private void checkMonsterCollision(Character1 character, Monster1 monster) {
+		Rectangle characterHitbox = character.getHitbox();
+		Rectangle monsterHitbox = monster.getHitbox();
+		
+		if (characterHitbox.intersects(monsterHitbox)) {
+			monster.checkCollision(characterHitbox);
+			character.takeDamage(20);
+		}
+		
+		if (character.isAttacking()) {
+			Rectangle attackHitbox = character.getAttackHitbox();
+			if (attackHitbox != null && attackHitbox.intersects(monsterHitbox)) {
+				monster.takeDamage(character.getAttackDamage());
 			}
-			
-			if (character.isAttacking()) {
-				Rectangle attackHitbox = character.getAttackHitbox();
-				if (attackHitbox != null && attackHitbox.intersects(monsterHitbox)) {
-					platformMonster.takeDamage(character.getAttackDamage());
-				}
+		}
+	}
+
+	// Character2를 위한 checkMonsterCollision 오버로드
+	private void checkMonsterCollision(Character2 character, Monster1 monster) {
+		Rectangle characterHitbox = character.getHitbox();
+		Rectangle monsterHitbox = monster.getHitbox();
+		
+		if (characterHitbox.intersects(monsterHitbox)) {
+			monster.checkCollision(characterHitbox);
+			character.takeDamage(20);
+		}
+		
+		if (character.isAttacking()) {
+			Rectangle attackHitbox = character.getAttackHitbox();
+			if (attackHitbox != null && attackHitbox.intersects(monsterHitbox)) {
+				monster.takeDamage(character.getAttackDamage());
 			}
 		}
 	}
@@ -289,7 +288,7 @@ public class Screen extends Canvas implements ComponentListener {
 				break;
 		}
 
-		// 몬스터 선택에 ���라 그리기
+		// 몬스터 선택에 따라 그리기
 		if (monster1 != null) {
 			monster1.draw(bg, this);
 		}
@@ -359,11 +358,21 @@ public class Screen extends Canvas implements ComponentListener {
 	public void setMonster2(Monster2 monster) {
 		this.monster2 = monster;
 		// 발판 위 몬스터 설정
-		this.platformMonster = new Monster1();
+		this.platformMonster = new Monster1() {
+			@Override
+			public void loadImage() {
+				try {
+					this.sprite = ImageIO.read(new File("image/몬스터2.png"));
+					this.sprite = TransformColorToTransparency(sprite, new Color(70, 112, 104));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		};
 		this.platformMonster.setPlatformBounds(platform4.x, platform4.x + platform4.width);
 		this.platformMonster.setY(platform4.y - 100);
 		
-		// Character1에 platformMonster만 설정
+		// Character에 platformMonster 설정
 		if (character1 != null) {
 			character1.setPlatformMonster(platformMonster);
 		} else if (character2 != null) {
@@ -377,11 +386,21 @@ public class Screen extends Canvas implements ComponentListener {
 	public void setMonster3(Monster3 monster) {
 		this.monster3 = monster;
 		// 발판 위 몬스터 설정
-		this.platformMonster = new Monster1();
+		this.platformMonster = new Monster1() {
+			@Override
+			public void loadImage() {
+				try {
+					this.sprite = ImageIO.read(new File("image/몬스터3.png"));
+					this.sprite = TransformColorToTransparency(sprite, new Color(70, 112, 104));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		};
 		this.platformMonster.setPlatformBounds(platform4.x, platform4.x + platform4.width);
 		this.platformMonster.setY(platform4.y - 100);
 		
-		// Character1에 platformMonster만 설정
+		// Character에 platformMonster 설정
 		if (character1 != null) {
 			character1.setPlatformMonster(platformMonster);
 		} else if (character2 != null) {

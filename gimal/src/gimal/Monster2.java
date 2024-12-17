@@ -40,8 +40,8 @@ public class Monster2 {
         // 대기 모션
         Map1 state1 = new Map1();
         Monster_states1[0] = state1;
-        state1.width = 146;
-        state1.height = 120;
+        state1.width = 138;  // Monster2의 기본 크기
+        state1.height = 150;
         state1.index_x = 0;
         state1.index_y = 0;
         state1.start_x = 0;
@@ -51,13 +51,13 @@ public class Monster2 {
         // 공격 모션
         state1 = new Map1();
         Monster_states1[1] = state1;
-        state1.width = 185;
-        state1.height = 120;
+        state1.width = 120;  // Monster2의 공격 모션 크기
+        state1.height = 145;
         state1.index_x = 0;
         state1.index_y = 0;
-        state1.start_x = 0;
-        state1.start_y = 465;
-        state1.frame_size = 5;
+        state1.start_x = 30;
+        state1.start_y = 520;
+        state1.frame_size = 10;
         
         // 이동 타이머 설정
         timer = new Timer();
@@ -73,7 +73,7 @@ public class Monster2 {
     
     private void loadImage() {
         try {
-            this.sprite = ImageIO.read(new File("image/몬스터10.png"));
+            this.sprite = ImageIO.read(new File("image/몬스터2.png"));
             this.sprite = TransformColorToTransparency(sprite, new Color(70, 112, 104));
         } catch (IOException e) {
             e.printStackTrace();

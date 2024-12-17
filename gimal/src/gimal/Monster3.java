@@ -40,23 +40,23 @@ public class Monster3 {
         // 대기 모션
         Map1 state1 = new Map1();
         Monster_states1[0] = state1;
-        state1.width = 146;
-        state1.height = 120;
+        state1.width = 250;  // Monster3의 기본 크기
+        state1.height = 215;
         state1.index_x = 0;
         state1.index_y = 0;
         state1.start_x = 0;
         state1.start_y = 0;
-        state1.frame_size = 6;
+        state1.frame_size = 8;
         
         // 공격 모션
         state1 = new Map1();
         Monster_states1[1] = state1;
-        state1.width = 185;
-        state1.height = 120;
+        state1.width = 250;  // Monster3의 공격 모션 크기
+        state1.height = 215;
         state1.index_x = 0;
         state1.index_y = 0;
         state1.start_x = 0;
-        state1.start_y = 465;
+        state1.start_y = 580;
         state1.frame_size = 5;
         
         // 이동 타이머 설정
@@ -64,7 +64,7 @@ public class Monster3 {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                updatePosition(); // 주기적으로 위치 업데이트
+                updatePosition();
             }
         }, 0, 50);
 
@@ -73,7 +73,7 @@ public class Monster3 {
     
     private void loadImage() {
         try {
-            this.sprite = ImageIO.read(new File("image/몬스터10.png"));
+            this.sprite = ImageIO.read(new File("image/몬스터3.png"));
             this.sprite = TransformColorToTransparency(sprite, new Color(70, 112, 104));
         } catch (IOException e) {
             e.printStackTrace();
@@ -233,7 +233,7 @@ public class Monster3 {
     public void setPlatformBounds(int left, int right) {
         this.leftBound = left;
         this.rightBound = right;
-        this.x = left + 50;  // 발판의 시작 지점에서 약간 떨어진 부분에서 시작
+        this.x = left + 50;  // 발판의 시작 지점���서 약간 떨어진 부분에서 시작
     }
 
     public void setY(int y) {

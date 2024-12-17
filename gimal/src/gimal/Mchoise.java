@@ -25,7 +25,7 @@ public class Mchoise {
 
         // 배경 패널 생성
         JPanel backgroundPanel = new JPanel() {
-            private Image backgroundImage = new ImageIcon("IMAGE/배경_맵 선택.jpg").getImage();
+            private Image backgroundImage = new ImageIcon("IMAGE/배경화면2.jpg").getImage();
 
             @Override
             protected void paintComponent(Graphics g) {

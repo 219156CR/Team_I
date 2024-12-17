@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 public class Monster1 {
-    private BufferedImage sprite;
+    protected BufferedImage sprite;
     private Map1[] Monster_states1;
     private int stateIndex = 0;
     private int hp = 100;
@@ -35,12 +35,12 @@ public class Monster1 {
 
     public Monster1() {
         loadImage();
-        Monster_states1 = new Map1[3];
+        initializeStates();
         
         // 대기 모션
         Map1 state1 = new Map1();
         Monster_states1[0] = state1;
-        state1.width = 146;
+        state1.width = 146;  // Monster1의 기본 크기
         state1.height = 120;
         state1.index_x = 0;
         state1.index_y = 0;
@@ -51,7 +51,7 @@ public class Monster1 {
         // 공격 모션
         state1 = new Map1();
         Monster_states1[1] = state1;
-        state1.width = 185;
+        state1.width = 185;  // Monster1의 공격 모션 크기
         state1.height = 120;
         state1.index_x = 0;
         state1.index_y = 0;
@@ -71,9 +71,9 @@ public class Monster1 {
         x = startX;
     }
     
-    private void loadImage() {
+    protected void loadImage() {
         try {
-            this.sprite = ImageIO.read(new File("image/몬스터10.png"));
+            this.sprite = ImageIO.read(new File("image/몬스터1.png"));
             this.sprite = TransformColorToTransparency(sprite, new Color(70, 112, 104));
         } catch (IOException e) {
             e.printStackTrace();
@@ -238,5 +238,31 @@ public class Monster1 {
 
     public void setY(int y) {
         this.monsterY = y;
+    }
+
+    protected void initializeStates() {
+        Monster_states1 = new Map1[3];
+        
+        // 대기 모션
+        Map1 state1 = new Map1();
+        Monster_states1[0] = state1;
+        state1.width = 146;
+        state1.height = 120;
+        state1.index_x = 0;
+        state1.index_y = 0;
+        state1.start_x = 0;
+        state1.start_y = 0;
+        state1.frame_size = 6;
+        
+        // 공격 모션
+        state1 = new Map1();
+        Monster_states1[1] = state1;
+        state1.width = 185;
+        state1.height = 120;
+        state1.index_x = 0;
+        state1.index_y = 0;
+        state1.start_x = 0;
+        state1.start_y = 465;
+        state1.frame_size = 5;
     }
 }
